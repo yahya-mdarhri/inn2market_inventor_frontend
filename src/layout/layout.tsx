@@ -31,13 +31,13 @@ const Layout: React.FC = () => {
       </button>
       {sidebarOpen && (
         <div
-          className="sidebar-backdrop"
+          className="sidebar-backdrop right"
           onClick={() => setSidebarOpen(false)}
         />
       )}
       <aside className={`sidebar ${sidebarOpen ? 'show' : ''}`}>
         <div className="sidebar-header">
-          <img src="logo.svg" alt="Logo" className="sidebar-logo bg-white-200" />
+          <img src="logo.svg" alt="Logo" className="sidebar-logo bg-white-800" />
           <h2 className="text-[0.24em] font-semibold text-white max-w-[180px] leading-tight">
             Center for Innovation and Entrepreneurship
           </h2>

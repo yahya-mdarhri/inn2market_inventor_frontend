@@ -13,6 +13,6 @@
   src: url('/fonts/Geist.otf') ;
 }
 @import "tailwindcss";
-.page{
-  @apply flex w-screen h-full flex-col items-center justify-center;
+.page {
+  @apply  fixed flex w-screen h-screen flex-col text-white bg-neutral-800 px-9 py-2 overflow-hidden;
 }
