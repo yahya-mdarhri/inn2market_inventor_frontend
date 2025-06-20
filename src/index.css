@@ -4,10 +4,10 @@
 
 
 :root{
-	--primary-color: #073567;
-	--background-color: #E9F1FA;
-	--secondary-color: #D1D600;
-  --text-color: #fffeff;
+	--primary: #073567;
+	--bg-color: #E9F1FA;
+	--secondary: #D1D600;
+  --white: #fffeff;
 }
 
 
@@ -41,7 +41,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 		--radius: 0.5rem;
-		--sidebar-background: 0 0% 98%;
+		--sidebar-background: hsl(--primary);
 		--sidebar-foreground: 240 5.3% 26.1%;
 		--sidebar-primary: 240 5.9% 10%;
 		--sidebar-primary-foreground: 0 0% 98%;
