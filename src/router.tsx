@@ -1,6 +1,8 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import ProtectedLayout from '@/layouts/ProtectedLayout/ProtectedLayout';
 
+import Dashboard from '@pages/Dashboard/Dashboard';
+
 // Simple page components
 const SplashScreen = () => (
   <div className="flex w-full h-screen items-center justify-center">
@@ -12,11 +14,7 @@ const Login = () => (
     Login
   </div>
 );
-const Dashboard = () => (
-  <div className="flex w-full h-screen items-center justify-center">
-    Dashboard
-  </div>
-);
+
 
 // Public layout wrapper
 const PublicLayout = () => {
