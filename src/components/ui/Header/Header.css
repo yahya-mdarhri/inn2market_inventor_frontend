@@ -1,0 +1,19 @@
+.header-container {
+  @apply flex w-full justify-between p-3 flex-row;
+}
+
+.left-actions{
+  @apply flex flex-row gap-2;
+}
+
+.left-actions *.box {
+  @apply h-9 w-9;
+}
+
+.header-button {
+  @apply  bg-[var(--primary)] hover:bg-[var(--secondary)] px-3;
+}
+
+.header-avatar {
+  @apply rounded  border-2 border-[var(--primary)];
+}

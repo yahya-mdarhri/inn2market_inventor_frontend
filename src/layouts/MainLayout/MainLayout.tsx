@@ -1,4 +1,5 @@
-import { SidebarProvider, SidebarTrigger } from '@shadcn/sidebar'
+import { SidebarProvider } from '@shadcn/sidebar'
+import Header from "@ui/Header/Header";
 import Sidebar from '@ui/SideBar/SideBar';
 import "./MainLayout.css";
 
@@ -8,7 +9,7 @@ function MainLayout({ children }: { children?: React.ReactNode }) {
         <SidebarProvider>
           <Sidebar />
           <main className='main-container'>
-            <SidebarTrigger />
+            <Header />
             {children}
           </main>
         </SidebarProvider>
