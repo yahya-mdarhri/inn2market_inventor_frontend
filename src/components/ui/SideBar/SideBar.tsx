@@ -10,8 +10,11 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  SidebarHeader,
 } from '@shadcn/sidebar';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import FullLogo from '@/assets/logos/full_logo.svg';
+import SmallLogo from '@/assets/logos/small_logo.svg';
 
 const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: Home },
@@ -33,6 +36,18 @@ function SideBar() {
 
   return (
     <Sidebar className="sidebar-container"  collapsible="icon">
+      {/* <SidebarHeader>
+        <Link to="/dashboard" className="flex items-center gap-3">
+
+          <img
+            src={SmallLogo}
+            alt="Logo"
+            className="w-8 h-8"
+          />
+          <span className='group-data-[collapsible=icon]:hidden'>Inventor Platform</span>
+        </Link>
+      </SidebarHeader> */}
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -48,10 +63,10 @@ function SideBar() {
                         : ''
                     }
                   >
-                    <a href={item.url} className="flex items-center gap-3">
+                    <Link to={item.url} className="flex items-center gap-3">
                       <item.icon />
                       <span className='group-data-[collapsible=icon]:hidden'>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -59,7 +74,7 @@ function SideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="mb-6">
+      <SidebarFooter>
         <SidebarMenu>
           {footerItems.map((item) => (
             <SidebarMenuItem key={item.title}>
@@ -72,10 +87,10 @@ function SideBar() {
                     : ''
                 }
               >
-                <a href={item.url} className="flex items-center gap-3">
+                <Link to={item.url} className="flex items-center gap-3">
                   <item.icon />
                   <span  className='group-data-[collapsible=icon]:hidden'>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

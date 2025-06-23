@@ -2,12 +2,11 @@ import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import ProtectedLayout from '@/layouts/ProtectedLayout/ProtectedLayout';
 
 import Dashboard from '@pages/Dashboard/Dashboard';
+import Profile from '@pages/Profile/Profile';
 
 // Simple page components
-const SplashScreen = () => (
-  <div className="flex w-full h-screen items-center justify-center">
-    Splash Screen
-  </div>
+const Tickets = () => (
+ <>Tickets</>
 );
 const Login = () => (
   <div className="flex w-full h-screen items-center justify-center">
@@ -28,7 +27,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <SplashScreen />
+        // element: <SplashScreen />
       },
       {
         path: 'login',
@@ -43,6 +42,26 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Dashboard />
+      }
+    ]
+  },
+  {
+    path: '/tickets',
+    element: <ProtectedLayout />,
+    children: [
+      {
+        index: true,
+        element: <Tickets />
+      }
+    ]
+  },
+  {
+    path: '/profile',
+    element: <ProtectedLayout ></ProtectedLayout>,
+    children: [
+      {
+        index: true,
+        element: <Profile />
       }
     ]
   },
