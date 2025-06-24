@@ -1,5 +1,7 @@
 import "./Dashboard.css";
 import { Card, CardContent } from '@shadcn/card';
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@shadcn/table';
+import { Clock } from 'lucide-react';
 import { Button } from '@shadcn/button';
 import { MdAdd } from 'react-icons/md';
 import heroImage from './images/welcome-image.png';
@@ -73,7 +75,7 @@ const tickets = [
 
 const Dashboard = () => (
   <div className="flex flex-col w-full items-center ">
-    <div className="flex w-full justify-center ">
+    <div className="flex w-full justify-center gap-12">
       {/* Welcome card */}
       <Card className="flex flex-row items-center bg-[#073567] rounded-2xl px-8 py-10 w-2/3 max-h-[305px] shadow-lg">
         <CardContent className="flex flex-col justify-center flex-1 p-0">
@@ -90,7 +92,7 @@ const Dashboard = () => (
             Maecenas vehicula.
           </p>
           <Button className="bg-[#D1D600] text-[#073567] font-bold text-lg px-6 py-2 rounded-lg flex items-center gap-2 shadow-none hover:bg-[#bdbd00]">
-            Create a Ticket <MdAdd size={22} />
+            Submit Your Patent <MdAdd size={22} />
           </Button>
         </CardContent>
         <div className="flex-1 flex justify-end">
@@ -102,7 +104,7 @@ const Dashboard = () => (
         </div>
       </Card>
       {/* Stats cards column on the right */}
-      <div className="flex flex-col gap-1 ml-12">
+      <div className="flex flex-col gap-1">
         {stats.map((stat) => (
           <Card key={stat.label} className="bg-[var(--primary)] rounded-xl px-6 py-4 min-w-[140px]">
             <CardContent className="flex flex-col items-center p-0">
@@ -155,44 +157,60 @@ const Dashboard = () => (
     </Card>
 
     {/* Tickets Table Section */}
-    <Card className="w-[950px] mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg">
-      <div className="flex justify-between items-center px-8 pt-6">
+    <Card className="w-full max-w-[950px] mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg mx-4">
+      <div className="flex justify-between items-center px-4 sm:px-8 pt-6">
         <h3 className="text-xl font-bold text-[#073567]">Tickets</h3>
         <Button className="bg-[#073567] text-white font-bold rounded-lg px-4 py-1 text-lg shadow-none hover:bg-[#05294a]">
           View all {'>'}
         </Button>
       </div>
-      <div className="overflow-x-auto px-8 pb-6">
-        <table className="w-full mt-4">
-          <thead>
-            <tr className="bg-[#073567]">
-              <th className="text-white text-lg font-bold py-3 px-4 text-left rounded-tl-xl">Title</th>
-              <th className="text-white text-lg font-bold py-3 px-4 text-left">Inventors</th>
-              <th className="text-white text-lg font-bold py-3 px-4 text-left rounded-tr-xl">status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets.map((ticket, idx) => (
-              <tr key={idx} className={`border-b border-[#a0b3c8] ${idx === tickets.length - 1 ? 'rounded-b-xl' : ''}` + ' bg-[#b7c7d8]'}>
-                <td className="text-[#073567] font-bold py-3 px-4">{ticket.title}</td>
-                <td className="py-3 px-4">
-                  <div className="flex items-center">
+      <div className="px-4 sm:px-8 pb-6">
+        <div className="mt-4 border border-[var(--primary)] rounded-xl overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
+                <TableHead className="text-white text-lg font-bold py-4 px-6 text-left">Title</TableHead>
+                <TableHead className="text-white text-lg font-bold py-4 px-6 text-left">Inventors</TableHead>
+                <TableHead className="text-white text-lg font-bold py-4 px-6 text-left">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {tickets.map((ticket, idx) => (
+                <TableRow 
+                  key={idx} 
+                  className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
+                    idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
+                  }`}
+                >
+                  <TableCell className="text-[#073567] font-semibold py-4 px-6">{ticket.title}</TableCell>
+                  <TableCell className="py-4 px-6">
+                    <div className="flex items-center">
                     <div className="flex -space-x-3">
                       {ticket.inventors.slice(0, 4).map((inv, i) => (
                         <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow" style={{ zIndex:  i + 1 }}>
                           <AvatarImage src={inv.img} alt={inv.name} />
-                          <AvatarFallback>{inv.name}</AvatarFallback>
+                          <AvatarFallback className='rounded'>{inv.name}</AvatarFallback>
                         </Avatar>
                       ))}
-                      <span className="ml-3 bg-[#222] text-white text-center text-sm font-bold rounborder rounded border-[#D1D600] shadowded px-2 py-2" style={{ zIndex: tickets.length }}>+5</span>
+                        <Avatar className="border rounded border-[#D1D600] bg-white shadow" style={{ zIndex:  ticket.inventors.length }}>
+                           <AvatarFallback className='rounded bg-[var(--primary)] text-white'>
+                            +{ticket.inventors.length - 4}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="text-[#073567] font-bold py-3 px-4">{ticket.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </TableCell>
+                  <TableCell className="py-4 px-6">
+                    <span className="inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium bg-amber-100 text-amber-800 border border-amber-200">
+                      <Clock className="w-4 h-4" />
+                      {ticket.status}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </Card>
 
