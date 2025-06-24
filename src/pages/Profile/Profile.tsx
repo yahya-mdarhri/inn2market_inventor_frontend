@@ -124,12 +124,12 @@ const coinventors = [
 
 const Profile = () => (
 
-  <div className="flex flex-col w-full items-center px-4 sm:px-6 lg:px-8">
+  <>
 
     {/* Profile Hero*/}
-    <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto justify-center gap-6 lg:gap-12">
+    <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto justify-center gap-6 lg:gap-12 lg:h-[220px]">
       {/* Profile Card */}
-      <Card className="flex-1 flex flex-col sm:flex-row items-center bg-[#073567] rounded-2xl p-4 sm:p-6 lg:p-8 min-w-0 w-full lg:max-w-[575px]">
+      <Card className="flex-1 flex flex-col sm:flex-row items-center bg-[#073567] rounded-2xl p-4 sm:p-6 lg:p-8 min-w-0 w-full max-w-[700px] lg:h-full">
         <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
           <Avatar className="h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32 border-2 rounded-2xl border-[#D1D600]">
             
@@ -144,15 +144,15 @@ const Profile = () => (
         </div>
       </Card>
       {/* Stats Cards */}
-      <div className="flex flex-col sm:flex-row lg:flex-col gap-3 sm:gap-4 min-w-0 w-full lg:w-auto">
-        <Card className="flex flex-row items-center justify-between bg-[#073567] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 lg:flex-none">
+      <div className="flex flex-1 flex-col sm:flex-row lg:flex-col gap-3 sm:gap-4 min-w-0 w-full lg:w-auto lg:h-full">
+        <Card className="flex flex-row items-center justify-between bg-[#073567] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 h-auto lg:h-0 lg:min-h-0 lg:max-h-full">
           <div className="flex items-center gap-2 sm:gap-3">
             <FileText className="text-white w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
             <span className="text-white text-base sm:text-lg font-semibold">Patents</span>
           </div>
           <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">15</span>
         </Card>
-        <Card className="flex flex-row items-center justify-between bg-[#073567] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 lg:flex-none">
+        <Card className="flex flex-row items-center justify-between bg-[#073567] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 h-auto lg:h-0 lg:min-h-0 lg:max-h-full">
           <div className="flex items-center gap-2 sm:gap-3">
             <Users className="text-white w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
             <span className="text-white text-base sm:text-lg font-semibold">Coinventors</span>
@@ -249,7 +249,8 @@ const Profile = () => (
         ))}
       </div>
     </Card>
-  </div>
+
+  </>
 );
 
 export default Profile;
