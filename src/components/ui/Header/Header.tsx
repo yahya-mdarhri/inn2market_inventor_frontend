@@ -7,7 +7,7 @@ import './Header.css';
 function Header() {
   return (
     <header className="header-container">
-      <SidebarTrigger />
+      <SidebarTrigger className='header-button box'/>
       <div className="left-actions">
         <Button className='header-button'>
           <MdAdd  />

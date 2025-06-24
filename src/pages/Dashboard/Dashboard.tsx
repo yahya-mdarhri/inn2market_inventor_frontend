@@ -74,42 +74,38 @@ const tickets = [
 ];
 
 const Dashboard = () => (
-  <div className="flex flex-col w-full items-center ">
-    <div className="flex w-full justify-center gap-12">
+  <>
+    <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto justify-center gap-6 lg:gap-12">
       {/* Welcome card */}
-      <Card className="flex flex-row items-center bg-[#073567] rounded-2xl px-8 py-10 w-2/3 max-h-[305px] shadow-lg">
-        <CardContent className="flex flex-col justify-center flex-1 p-0">
-          <h2 className="text-white text-2xl font-bold mb-2">
+      <Card className="flex items-center bg-[#073567] rounded-2xl px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-10 w-full lg:w-2/3 max-h-none lg:max-h-[305px] shadow-lg">
+        <CardContent className="flex flex-col justify-center flex-1 p-0 text-center sm:text-left">
+          <h2 className="text-white text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">
             Welcome back, <span className="text-[#D1D600]">Hamza</span>
           </h2>
-          <p className="text-white text-lg font-semibold mb-1">
+          <p className="text-white text-sm sm:text-base lg:text-lg font-semibold mb-1">
             Lorem ipsum dolor sit amet,
-          </p>
-          <p className="text-white text-lg font-semibold mb-1">
             consectetur adipiscing elit.
-          </p>
-          <p className="text-white text-lg font-semibold mb-6">
             Maecenas vehicula.
           </p>
-          <Button className="bg-[#D1D600] text-[#073567] font-bold text-lg px-6 py-2 rounded-lg flex items-center gap-2 shadow-none hover:bg-[#bdbd00]">
-            Submit Your Patent <MdAdd size={22} />
+          <Button className="bg-[#D1D600] text-[#073567] font-bold text-xs sm:text-sm lg:text-base px-2 sm:px-3 lg:px-6 py-1.5 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 shadow-none hover:bg-[#bdbd00] w-full sm:w-auto justify-center">
+            Submit Your Patent <MdAdd size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
           </Button>
         </CardContent>
-        <div className="flex-1 flex justify-end">
+        <div className="flex-1 flex justify-center sm:justify-end mt-0 sm:w-2/3">
           <img
             src={heroImage}
             alt="Welcome"
-            className="max-h-56 w-auto rounded-xl"
+            className="max-h-28 sm:max-h-40 lg:max-h-48 xl:max-h-56 w-auto rounded-xl"
           />
         </div>
       </Card>
       {/* Stats cards column on the right */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-row lg:flex-col gap-3 lg:gap-1 w-full lg:w-auto">
         {stats.map((stat) => (
-          <Card key={stat.label} className="bg-[var(--primary)] rounded-xl px-6 py-4 min-w-[140px]">
+          <Card key={stat.label} className="bg-[var(--primary)] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 lg:flex-none lg:min-w-[140px]">
             <CardContent className="flex flex-col items-center p-0">
-              <span className="text-white text-lg font-semibold mb-1">{stat.label}</span>
-              <span className="text-[#D1D600] text-2xl font-bold">{stat.value}</span>
+              <span className="text-white text-sm sm:text-lg font-semibold mb-1">{stat.label}</span>
+              <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">{stat.value}</span>
             </CardContent>
           </Card>
         ))}
@@ -118,11 +114,11 @@ const Dashboard = () => (
     
 
     {/* Recent Activities Section */}
-    <Card className="bg-[#b7c7d8] w-[950px] mt-8 rounded-2xl shadow-lg border-0">
-      <div className="flex justify-between items-center px-8 pt-6 pb-2">
-        <h3 className="text-xl font-bold text-[#073567]">Recent Activities</h3>
+    <Card className="bg-[#b7c7d8] w-full max-w-7xl mt-6 sm:mt-8 rounded-2xl shadow-lg border-0">
+      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2">
+        <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Recent Activities</h3>
       </div>
-      <div className="px-8 pb-6">
+      <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
         <ul className="relative">
           {/* Vertical timeline line */}
           <div className="absolute left-3 top-0 bottom-0 w-1 bg-[#D1D600] rounded-full opacity-30" style={{ zIndex: 0 }} />
@@ -136,17 +132,17 @@ const Dashboard = () => (
             return (
               <li
                 key={idx}
-                className={`relative flex items-center pl-12 pr-4 py-4 group hover:bg-[#e6ecf3] rounded-xl transition-colors duration-150`}
+                className={`relative flex flex-col sm:flex-row sm:items-center pl-12 pr-4 py-3 sm:py-4 group hover:bg-[#e6ecf3] rounded-xl transition-colors duration-150`}
                 style={{ zIndex: 1 }}
               >
                 {/* Timeline dot with icon */}
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-[#D1D600] text-white rounded-full shadow-md border-4 border-white">
-                  <Icon size={22} />
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-[#D1D600] text-white rounded-full shadow-md border-2 sm:border-4 border-white">
+                  <Icon size={16} className="sm:w-6 sm:h-6" />
                 </span>
-                <div className="flex-1">
-                  <span className="text-[#073567] font-semibold">{item.activity}</span>
+                <div className="flex-1 mb-2 sm:mb-0">
+                  <span className="text-[#073567] font-semibold text-sm sm:text-base">{item.activity}</span>
                 </div>
-                <span className="ml-4 px-3 py-1 rounded-full bg-[#073567] text-white text-xs font-medium opacity-80">
+                <span className="ml-0 sm:ml-4 px-2 sm:px-3 py-1 rounded-full bg-[#073567] text-white text-xs font-medium opacity-80 w-fit">
                   {item.time}
                 </span>
               </li>
@@ -157,64 +153,68 @@ const Dashboard = () => (
     </Card>
 
     {/* Tickets Table Section */}
-    <Card className="w-full max-w-[950px] mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg mx-4">
-      <div className="flex justify-between items-center px-4 sm:px-8 pt-6">
-        <h3 className="text-xl font-bold text-[#073567]">Tickets</h3>
-        <Button className="bg-[#073567] text-white font-bold rounded-lg px-4 py-1 text-lg shadow-none hover:bg-[#05294a]">
+    <Card className="w-full max-w-7xl mt-6 sm:mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg">
+      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Tickets</h3>
+        <Button className="bg-[#073567] text-white font-bold rounded-lg px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg shadow-none hover:bg-[#05294a]">
           View all {'>'}
         </Button>
       </div>
-      <div className="px-4 sm:px-8 pb-6">
+      <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
         <div className="mt-4 border border-[var(--primary)] rounded-xl overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
-                <TableHead className="text-white text-lg font-bold py-4 px-6 text-left">Title</TableHead>
-                <TableHead className="text-white text-lg font-bold py-4 px-6 text-left">Inventors</TableHead>
-                <TableHead className="text-white text-lg font-bold py-4 px-6 text-left">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tickets.map((ticket, idx) => (
-                <TableRow 
-                  key={idx} 
-                  className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
-                    idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
-                  }`}
-                >
-                  <TableCell className="text-[#073567] font-semibold py-4 px-6">{ticket.title}</TableCell>
-                  <TableCell className="py-4 px-6">
-                    <div className="flex items-center">
-                    <div className="flex -space-x-3">
-                      {ticket.inventors.slice(0, 4).map((inv, i) => (
-                        <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow" style={{ zIndex:  i + 1 }}>
-                          <AvatarImage src={inv.img} alt={inv.name} />
-                          <AvatarFallback className='rounded'>{inv.name}</AvatarFallback>
-                        </Avatar>
-                      ))}
-                        <Avatar className="border rounded border-[#D1D600] bg-white shadow" style={{ zIndex:  ticket.inventors.length }}>
-                           <AvatarFallback className='rounded bg-[var(--primary)] text-white'>
-                            +{ticket.inventors.length - 4}
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="py-4 px-6">
-                    <span className="inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium bg-amber-100 text-amber-800 border border-amber-200">
-                      <Clock className="w-4 h-4" />
-                      {ticket.status}
-                    </span>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
+                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
+                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
+                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {tickets.map((ticket, idx) => (
+                  <TableRow 
+                    key={idx} 
+                    className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
+                      idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
+                    }`}
+                  >
+                    <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
+                      <div className="truncate max-w-[150px] sm:max-w-[200px] lg:max-w-none">{ticket.title}</div>
+                    </TableCell>
+                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                      <div className="flex items-center">
+                        <div className="flex -space-x-2 sm:-space-x-3">
+                          {ticket.inventors.slice(0, 4).map((inv, i) => (
+                            <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  i + 1 }}>
+                              <AvatarImage src={inv.img} alt={inv.name} />
+                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.name}</AvatarFallback>
+                            </Avatar>
+                          ))}
+                          <Avatar className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  ticket.inventors.length }}>
+                             <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
+                              +{ticket.inventors.length - 4}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                      <span className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-amber-100 text-amber-800 border border-amber-200">
+                        <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                        {ticket.status}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </Card>
 
-  </div>
+  </>
 );
 
 export default Dashboard;
