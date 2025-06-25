@@ -1,5 +1,5 @@
 .header-container {
-  @apply flex w-full justify-between py-3 px-4 flex-row;
+  @apply flex w-full justify-between py-3  px-4 sm:px-6 lg:px-8 flex-row;
 }
 
 .left-actions{

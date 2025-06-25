@@ -1,7 +1,7 @@
 import "./Dashboard.css";
 import { Card, CardContent } from '@shadcn/card';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@shadcn/table';
-import { Clock } from 'lucide-react';
+import { Clock, FileText, Users, Ticket } from 'lucide-react';
 import { Button } from '@shadcn/button';
 import { MdAdd } from 'react-icons/md';
 import heroImage from './images/welcome-image.png';
@@ -9,9 +9,9 @@ import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/avatar';
 import { MdAddCircle, MdEdit, MdPersonAdd, MdCheckCircle } from "react-icons/md";
 
 const stats = [
-  { label: 'Patents', value: 12 },
-  { label: 'Tickets', value: 34 },
-  { label: 'Co-Inventors', value: 5 },
+  { label: 'Patents', value: 12, icon: FileText },
+  { label: 'Tickets', value: 34, icon: Ticket },
+  { label: 'Co-Inventors', value: 5, icon: Users },
 ];
 
 const tickets = [
@@ -100,15 +100,21 @@ const Dashboard = () => (
         </div>
       </Card>
       {/* Stats cards column on the right */}
-      <div className="flex flex-row lg:flex-col gap-3 lg:gap-1 w-full lg:w-auto">
-        {stats.map((stat) => (
-          <Card key={stat.label} className="bg-[var(--primary)] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 lg:flex-none lg:min-w-[140px]">
-            <CardContent className="flex flex-col items-center p-0">
-              <span className="text-white text-sm sm:text-lg font-semibold mb-1">{stat.label}</span>
-              <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">{stat.value}</span>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="flex flex-1 flex-row lg:flex-col gap-3 lg:gap-4 w-full lg:w-auto">
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card key={stat.label} className="bg-[var(--primary)] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 lg:flex-none lg:min-w-[140px] min-h-[5rem]">
+              <CardContent className="flex flex-row items-center justify-between p-0 h-full">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Icon className="text-white w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+                  <span className="text-white text-base sm:text-lg font-semibold">{stat.label}</span>
+                </div>
+                <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">{stat.value}</span>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
     
@@ -155,7 +161,10 @@ const Dashboard = () => (
     {/* Tickets Table Section */}
     <Card className="w-full max-w-7xl mt-6 sm:mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg">
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
-        <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Tickets</h3>
+        <div>
+          <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Tickets</h3>
+          <p className="text-[#073567] text-sm sm:text-base opacity-80 mt-1">Your recent patent ticket submissions</p>
+        </div>
         <Button className="bg-[#073567] text-white font-bold rounded-lg px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg shadow-none hover:bg-[#05294a]">
           View all {'>'}
         </Button>

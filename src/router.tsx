@@ -3,6 +3,7 @@ import ProtectedLayout from '@/layouts/ProtectedLayout/ProtectedLayout';
 
 import Dashboard from '@pages/Dashboard/Dashboard';
 import Profile from '@pages/Profile/Profile';
+import Settings from '@pages/Settings/Settings';
 
 // Simple page components
 const Tickets = () => (
@@ -57,11 +58,21 @@ export const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: <ProtectedLayout ></ProtectedLayout>,
+    element: <ProtectedLayout />,
     children: [
       {
         index: true,
         element: <Profile />
+      }
+    ]
+  },
+  {
+    path: '/settings',
+    element: <ProtectedLayout />,
+    children: [
+      {
+        index: true,
+        element: <Settings />
       }
     ]
   },

@@ -227,14 +227,17 @@ const Profile = () => (
     {/* Co-Inventors Section */}
     <Card className="w-full max-w-7xl mt-6 sm:mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg">
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
-        <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Co-Inventors</h3>
+        <div>
+          <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Co-Inventors</h3>
+          <p className="text-[#073567] text-sm sm:text-base opacity-80 mt-1">Collaborators who contributed to your patents</p>
+        </div>
         <Button className="bg-[#073567] text-white font-bold rounded-lg px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg shadow-none hover:bg-[#05294a]">
           View all {'>'}
         </Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 lg:p-8">
+      <div className="flex flex-wrap gap-3 sm:gap-4 p-4 sm:p-6 lg:p-8">
         {coinventors.map((inventor, idx) => (
-          <Card key={idx} className="bg-[var(--primary)] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
+          <Card key={idx} className="bg-[var(--primary)] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 flex-1 min-w-[32%] max-w-full sm:max-w-[48%] lg:max-w-[31%] xl:max-w-[23%]">
             <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 lg:p-6">
               <Avatar className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 border-2 border-[#D1D600] rounded-xl flex-shrink-0">
                 <AvatarImage src={inventor.avatar} alt={inventor.name} />
