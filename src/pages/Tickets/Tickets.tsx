@@ -53,6 +53,19 @@ const tickets: Ticket[] = [
     meeting_date: "2024-06-12T14:00:00Z",
     created_at: "2024-06-02T11:30:00Z",
   },
+  {
+    id: "3",
+    title: "Smart Mug",
+    summary: "A mug that keeps your drink at the perfect temperature",
+    context: "Home & Kitchen",
+    problem_identification: "Drinks get cold too quickly",
+    drawings: "smartmug.pdf",
+    inventors: ["David Black"],
+    co_applications: ["HomeTech"],
+    status: "refused",
+    meeting_date: "2024-06-15T09:00:00Z",
+    created_at: "2024-06-03T10:00:00Z",
+  },
 ]
 
 const allColumns = [
@@ -82,6 +95,7 @@ export function TicketsTable() {
     return initial
   })
   const [hoveredCol, setHoveredCol] = React.useState<string | null>(null)
+  const [selected, setSelected] = React.useState<string[]>([])
 
   // Sorting logic
   const sortedTickets = React.useMemo(() => {
@@ -109,10 +123,32 @@ export function TicketsTable() {
     ticket.inventors.some(inv => inv.toLowerCase().includes(search.toLowerCase()))
   )
 
-  // Export to CSV
+  // Handle select all
+  const allVisibleIds = filteredTickets.map(t => t.id)
+  const isAllSelected = allVisibleIds.length > 0 && allVisibleIds.every(id => selected.includes(id))
+  const isIndeterminate = selected.length > 0 && !isAllSelected
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelected([])
+    } else {
+      setSelected(allVisibleIds)
+    }
+  }
+
+  const toggleSelect = (id: string) => {
+    setSelected(sel =>
+      sel.includes(id) ? sel.filter(sid => sid !== id) : [...sel, id]
+    )
+  }
+
+  // Export to CSV (only selected if any, else all)
   const exportToCSV = () => {
+    const exportTickets = selected.length > 0
+      ? filteredTickets.filter(t => selected.includes(t.id))
+      : filteredTickets
     const headers = allColumns.filter(col => visibleCols.includes(col.key)).map(col => col.label)
-    const rows = filteredTickets.map(ticket =>
+    const rows = exportTickets.map(ticket =>
       allColumns.filter(col => visibleCols.includes(col.key)).map(col => {
         const value = ticket[col.key as keyof Ticket]
         if (Array.isArray(value)) return value.join("; ")
@@ -130,10 +166,13 @@ export function TicketsTable() {
     document.body.removeChild(link)
   }
 
-  // Export to Excel
+  // Export to Excel (only selected if any, else all)
   const exportToExcel = () => {
+    const exportTickets = selected.length > 0
+      ? filteredTickets.filter(t => selected.includes(t.id))
+      : filteredTickets
     const headers = allColumns.filter(col => visibleCols.includes(col.key)).map(col => col.label)
-    const rows = filteredTickets.map(ticket =>
+    const rows = exportTickets.map(ticket =>
       allColumns.filter(col => visibleCols.includes(col.key)).map(col => {
         const value = ticket[col.key as keyof Ticket]
         if (Array.isArray(value)) return value.join("; ")
@@ -160,7 +199,7 @@ export function TicketsTable() {
   const refused = tickets.filter(t => t.status === "refused").length
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4">
+    <>
       {/* Hero Section */}
       <Card className="w-full max-w-7xl mx-auto mt-6 sm:mt-10 mb-8 p-0 bg-[#073567] border-0 shadow-xl">
         <section className="flex flex-col gap-6 p-6 sm:p-10">
@@ -222,14 +261,11 @@ export function TicketsTable() {
       </Card>
       {/* Table Card */}
       <div className="w-full max-w-4xl lg:max-w-7xl mx-auto mt-6 sm:mt-8 bg-[#b7c7d8] rounded-2xl shadow-lg border-0 p-4 sm:p-6 lg:p-8">
-        {/* Tickets Section Title */}
         <div className="mb-6">
           <h2 className="text-3xl font-bold text-[#073567]">Tickets</h2>
           <p className="text-gray-600 mt-1">Manage and review all submitted innovation tickets. Use the filters and export options to work efficiently.</p>
         </div>
-        {/* Features row */}
         <div className="flex flex-row items-center justify-between pb-4 mb-4 gap-2 sm:gap-4">
-          {/* Search input with icon */}
           <div className="relative w-full max-w-xs">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
               <Search size={18} />
@@ -303,6 +339,22 @@ export function TicketsTable() {
             <Table className="min-w-full table-fixed">
               <TableHeader>
                 <TableRow className="bg-[#073567eb] hover:bg-[#073567eb] border-none">
+                  {/* Checkbox column */}
+                  <TableHead
+                    className="text-white text-base font-bold py-3 px-3 text-left min-w-[40px] w-[40px]"
+                    style={{ width: 40, minWidth: 40, maxWidth: 40, userSelect: "none", paddingRight: 0 }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected}
+                      ref={el => {
+                        if (el) el.indeterminate = isIndeterminate
+                      }}
+                      onChange={toggleSelectAll}
+                      aria-label="Select all"
+                    />
+                  </TableHead>
+                  {/* Other column */}
                   {allColumns.filter(col => visibleCols.includes(col.key)).map((col, idx, arr) => (
                     <TableHead
                       key={col.key}
@@ -315,13 +367,13 @@ export function TicketsTable() {
                       style={{
                         width: colWidths[col.key],
                         minWidth: 140,
-                        maxWidth: 500,
+                        // maxWidth: 500,
                         userSelect: "none",
                         paddingRight: 0,
                         background: hoveredCol === col.key ? "#0a3a6e" : undefined,
                       }}
                     >
-                      <div className="flex items-center gap-1 select-none justify-between w-full h-full">
+                      <div className="flex items-center select-none justify-between w-full h-full">
                         <span>{col.label}</span>
                         <span
                           className="cursor-pointer ml-1 flex items-center"
@@ -339,9 +391,10 @@ export function TicketsTable() {
                           ) : (
                             <ArrowUpDown size={16} className="opacity-60" />
                           )}
+                        
                         </span>
                         {/* Resize handle */}
-                        {idx !== arr.length - 1 && (
+                        {/* {idx !== arr.length - 1 && ( */}
                           <ResizableBox
                             width={colWidths[col.key]}
                             height={0}
@@ -371,7 +424,7 @@ export function TicketsTable() {
                           >
                             <div />
                           </ResizableBox>
-                        )}
+                        {/* )} */}
                       </div>
                     </TableHead>
                   ))}
@@ -380,6 +433,19 @@ export function TicketsTable() {
               <TableBody>
                 {filteredTickets.map(ticket => (
                   <TableRow key={ticket.id} className="bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 border-b border-[var(--primary)]">
+                    {/* Checkbox cell */}
+                    <TableCell
+                      className="py-3 px-3 text-sm"
+                      style={{ width: 40, minWidth: 40, maxWidth: 40 }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(ticket.id)}
+                        onChange={() => toggleSelect(ticket.id)}
+                        aria-label={`Select ticket ${ticket.title}`}
+                      />
+                    </TableCell>
+                    {/* Other cell */}
                     {allColumns.filter(col => visibleCols.includes(col.key)).map((col, idx, arr) => (
                       <TableCell
                         key={col.key}
@@ -423,7 +489,7 @@ export function TicketsTable() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
