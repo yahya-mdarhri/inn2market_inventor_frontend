@@ -2,7 +2,7 @@ import "./Settings.css"
 import { Card, CardContent } from '@shadcn/card';
 import { Button } from '@shadcn/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@shadcn/avatar';
-import { MdLanguage, MdNotifications, MdSecurity, MdPerson, MdEdit } from "react-icons/md";
+import { MdLanguage, MdNotifications, MdSecurity, MdPerson, MdEdit, MdSettings } from "react-icons/md";
 import { useState, useRef, useEffect } from 'react';
 
 const affiliationOptions = [
@@ -132,7 +132,7 @@ const Settings = () => {
         <Card className="bg-[#b7c7d8] rounded-2xl p-6 shadow-lg">
           <CardContent className="flex flex-col gap-6 p-0">
             <div className="flex items-center gap-4">
-              <MdSecurity className="text-[#073567] w-6 h-6" />
+              <MdSettings className="text-[#073567] w-6 h-6" />
               <h3 className="text-[#073567] text-xl font-bold">General</h3>
             </div>
             <div className="flex flex-col gap-4">
@@ -208,11 +208,11 @@ const Settings = () => {
         </Card>
 
         {/* Save All Changes Button */}
-        {/* <div className="flex justify-end">
+        <div className="flex justify-end">
           <Button className="bg-[#073567] text-white font-bold rounded-lg px-6 py-3 text-lg hover:bg-[#05294a]">
             Save All Changes
           </Button>
-        </div> */}
+        </div>
       </div>
     </>
   );

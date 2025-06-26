@@ -100,7 +100,7 @@ const Dashboard = () => (
         </div>
       </Card>
       {/* Stats cards column on the right */}
-      <div className="flex flex-1 flex-row lg:flex-col gap-3 lg:gap-4 w-full lg:w-auto">
+      <div className="flex flex-1 flex-row lg:flex-col gap-5 lg:gap-4 w-full lg:w-auto">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
