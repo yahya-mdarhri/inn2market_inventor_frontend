@@ -5,13 +5,7 @@ import Dashboard from '@pages/Dashboard/Dashboard';
 import Profile from '@pages/Profile/Profile';
 import Settings from '@pages/Settings/Settings';
 import Tickets from '@pages/Tickets/Tickets';
-
-
-const Login = () => (
-  <div className="flex w-full h-screen items-center justify-center">
-    Login
-  </div>
-);
+import Login from '@pages/Login/Login';
 
 
 // Public layout wrapper
