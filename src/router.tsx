@@ -30,46 +30,34 @@ export const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <ProtectedLayout />,
-    children: [
-      {
-        index: true,
-        element: <Dashboard />
-      }
-    ]
+    element: (
+      <ProtectedLayout>
+        <Dashboard />
+      </ProtectedLayout>
+    ),
   },
   {
     path: '/tickets',
-    element: <ProtectedLayout />,
-    children: [
-      {
-        index: true,
-        element: <Tickets />
-      }
-    ]
+    element: (
+      <ProtectedLayout>
+        <Tickets />
+      </ProtectedLayout>
+    ),
   },
   {
     path: '/profile',
-    element: <ProtectedLayout />,
-    children: [
-      {
-        index: true,
-        element: <Profile />
-      }
-    ]
+    element: (
+      <ProtectedLayout>
+        <Profile />
+      </ProtectedLayout>
+    ),
   },
   {
     path: '/settings',
-    element: <ProtectedLayout />,
-    children: [
-      {
-        index: true,
-        element: <Settings />
-      }
-    ]
+    element: (
+      <ProtectedLayout>
+        <Settings />
+      </ProtectedLayout>
+    ),
   },
-  {
-    path: '*',
-    element: <Navigate to="/" replace />
-  }
 ]);
