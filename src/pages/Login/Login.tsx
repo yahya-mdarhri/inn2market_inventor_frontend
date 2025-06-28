@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useAuth } from '@context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 const Auth: React.FC = () => {
+
+  const { login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,12 +21,12 @@ const Auth: React.FC = () => {
       return;
     }
 
-    axios.post('api/accounts/login/', { email, password })
-      .then((response) => {
+    login({ email, password })
+      .then(() => {
         navigate('/dashboard');
       })
-      .catch(err => {
-        setError(err.response?.data?.error || 'Login failed');
+      .catch((err) => {
+        setError(err.response?.data?.detail || 'Login failed');
       });
 
   };
