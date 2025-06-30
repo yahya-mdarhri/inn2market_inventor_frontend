@@ -8,6 +8,7 @@ type UserContextType = {
   setUser: (user: User | null) => void;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
+  loading?: boolean;
 }
 
 // User Context
@@ -26,6 +27,7 @@ export const useAuth = () =>  {
 // Context provider wrapper
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Get and refresh user data
   const refreshUser = () => {
@@ -35,6 +37,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     })
     .catch(() => {
       setUser(null)
+    })
+    .finally (() => { 
+      setLoading(false);
     })
   }
 
@@ -64,7 +69,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
 
   return (
-    <UserContext.Provider value={{ user, setUser, login, logout }}>
+    <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </UserContext.Provider>
   );
