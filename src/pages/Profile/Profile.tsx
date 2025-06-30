@@ -5,6 +5,7 @@ import { FileText, Users, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '@shadcn/button';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@shadcn/table';
 import './Profile.css';
+import { useAuth } from '@context/UserContext';
 
 
 const tickets = [
@@ -122,8 +123,10 @@ const coinventors = [
   },
 ];
 
-const Profile = () => (
+const Profile = () => {
+  const { user } = useAuth();
 
+  return (
   <>
 
     {/* Profile Hero*/}
@@ -138,9 +141,15 @@ const Profile = () => (
           </Avatar>
         </div>
         <div className="flex flex-col justify-center text-center sm:text-left text-white flex-1 min-w-0">
-          <span className="text-xl sm:text-2xl font-bold leading-tight">Full name</span>
-          <span className="text-lg sm:text-xl text-[#D1D600] font-medium mb-2">Affiliation</span>
-          <span className="text-sm sm:text-base opacity-90 mb-1 break-all">name@email.com</span>
+          <span className="text-xl sm:text-2xl font-bold leading-tight">
+            {user?.inventor?.preferred_name || 'Full Name'}
+          </span>
+          <span className="text-lg sm:text-xl text-[#D1D600] font-medium mb-2">
+            {user?.inventor?.affiliation || 'Affiliation'}
+          </span>
+          <span className="text-sm sm:text-base opacity-90 mb-1 break-all">
+            {user?.email}
+          </span>
         </div>
       </Card>
       {/* Stats Cards */}
@@ -254,6 +263,6 @@ const Profile = () => (
     </Card>
 
   </>
-);
+)};
 
 export default Profile;
