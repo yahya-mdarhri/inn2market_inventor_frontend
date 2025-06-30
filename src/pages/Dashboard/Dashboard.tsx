@@ -7,6 +7,7 @@ import { MdAdd } from 'react-icons/md';
 import heroImage from './images/welcome-image.png';
 import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/avatar';
 import { MdAddCircle, MdEdit, MdPersonAdd, MdCheckCircle } from "react-icons/md";
+import { useAuth } from "@context/UserContext";
 
 const stats = [
   { label: 'Patents', value: 12, icon: FileText },
@@ -73,14 +74,17 @@ const tickets = [
   },
 ];
 
-const Dashboard = () => (
-  <>
+const Dashboard = () => {
+
+  const {user} = useAuth();
+  return (
+    <>
     <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto justify-center gap-6 lg:gap-12">
       {/* Welcome card */}
       <Card className="flex items-center bg-[#073567] rounded-2xl px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-10 w-full lg:w-2/3 max-h-none lg:max-h-[305px] shadow-lg">
         <CardContent className="flex flex-col justify-center flex-1 p-0 text-center sm:text-left">
           <h2 className="text-white text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">
-            Welcome back, <span className="text-[#D1D600]">Hamza</span>
+            Welcome back, <span className="text-[#D1D600]">{user?.inventor?.preferred_name}</span>
           </h2>
           <p className="text-white text-sm sm:text-base lg:text-lg font-semibold mb-1">
             Lorem ipsum dolor sit amet,
@@ -224,6 +228,7 @@ const Dashboard = () => (
     </Card>
 
   </>
-);
+  )
+};
 
 export default Dashboard;

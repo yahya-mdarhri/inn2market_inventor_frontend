@@ -4,17 +4,16 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarHeader,
 } from '@shadcn/sidebar';
 import { useLocation, Link } from 'react-router-dom';
 import FullLogo from '@/assets/logos/full_logo.svg';
 import SmallLogo from '@/assets/logos/small_logo.svg';
+import { useAuth } from '@context/UserContext';
 
 const mainItems = [
   { title: 'Dashboard', url: '/dashboard', icon: Home },
@@ -26,11 +25,12 @@ const mainItems = [
 const footerItems = [
   { title: 'Profile', url: '/profile', icon: User },
   { title: 'Settings', url: '/settings', icon: Settings },
-  { title: 'Log out', url: '/logout', icon: LogOut },
+  { title: 'Log out', url: '', icon: LogOut },
 ];
 
 function SideBar() {
   const location = useLocation();
+  const { logout } = useAuth();
 
   const isActive = (url: string) => location.pathname === url;
 
@@ -87,7 +87,7 @@ function SideBar() {
                     : ''
                 }
               >
-                <Link to={item.url} className="flex items-center gap-3">
+                <Link to={item.url} className="flex items-center gap-3" onClick={item.title === 'Log out' ? logout : undefined}>
                   <item.icon />
                   <span  className='group-data-[collapsible=icon]:hidden'>{item.title}</span>
                 </Link>

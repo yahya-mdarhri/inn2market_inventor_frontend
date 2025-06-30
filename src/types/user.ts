@@ -2,7 +2,7 @@
 export type User = {
   id: string;
   email: string;
-  inverntor?: Inventor;
+  inventor?: Inventor;
 }
 
 // Inventor data type

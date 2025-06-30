@@ -1,5 +1,5 @@
 import { useAuth } from '@context/UserContext';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -12,9 +12,15 @@ const ProtectedRoute = ({ children = <></> }: ProtectedRouteProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  // If user is not authenticated, redirect to login page
+  useEffect(() => {
+    // Check if user is authenticated
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+  
+  // If user is not authenticated, don't render children
   if (!user) {
-    navigate('/login');
     return null;
   }
   
