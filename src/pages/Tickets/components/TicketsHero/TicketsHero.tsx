@@ -3,12 +3,14 @@ import { Button } from "@/components/shadcn/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/card"
 import { Ticket as TicketIcon, Clock, CheckCircle, Plus, XCircle } from "lucide-react"
 import type { Ticket } from "@/types"
+import { Skeleton } from "@/components/shadcn/skeleton"
 
 interface TicketsHeroProps {
-  tickets: Ticket[]
+  tickets: Ticket[],
+  isLoading?: boolean
 }
 
-export function TicketsHero({ tickets }: TicketsHeroProps) {
+export function TicketsHero({ tickets, isLoading }: TicketsHeroProps) {
   // Stats calculation
   const total = tickets.length
   const pending = tickets.filter(t => t.status === "pending").length
@@ -42,7 +44,13 @@ export function TicketsHero({ tickets }: TicketsHeroProps) {
               <TicketIcon className="text-[#073567] w-7 h-7" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-[#073567]">{total}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-[#073567]">
+                {
+                !isLoading ?
+                total :
+                <Skeleton className="w-24 h-8 bg-blue-300 animate-pulse" />
+                }
+              </CardTitle>
               <div className="text-blue-800 text-sm font-medium">Total Tickets</div>
             </div>
           </Card>
@@ -51,7 +59,13 @@ export function TicketsHero({ tickets }: TicketsHeroProps) {
               <Clock className="text-yellow-700 w-7 h-7" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-yellow-700">{pending}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-yellow-700">
+                {
+                !isLoading ?
+                pending :
+                <Skeleton className="w-24 h-8 bg-yellow-300 animate-pulse" />
+                }
+              </CardTitle>
               <div className="text-yellow-900 text-sm font-medium">Pending</div>
             </div>
           </Card>
@@ -60,7 +74,13 @@ export function TicketsHero({ tickets }: TicketsHeroProps) {
               <CheckCircle className="text-green-700 w-7 h-7" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-green-700">{approved}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-green-700">
+                {
+                !isLoading ?
+                approved :
+                <Skeleton className="w-24 h-8 bg-green-300 animate-pulse" />
+                }
+              </CardTitle>
               <div className="text-green-900 text-sm font-medium">Approved</div>
             </div>
           </Card>
@@ -69,7 +89,13 @@ export function TicketsHero({ tickets }: TicketsHeroProps) {
               <XCircle className="text-red-700 w-7 h-7" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-red-700">{refused}</CardTitle>
+              <CardTitle className="text-2xl font-bold text-red-700">
+                {
+                !isLoading ?
+                refused :
+                <Skeleton className="w-24 h-8 bg-red-300 animate-pulse" />
+                }
+              </CardTitle>
               <div className="text-red-900 text-sm font-medium">Refused</div>
             </div>
           </Card>

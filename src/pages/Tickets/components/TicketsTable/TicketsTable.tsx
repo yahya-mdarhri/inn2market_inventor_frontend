@@ -10,6 +10,7 @@ import { ResizableBox } from "react-resizable"
 import "react-resizable/css/styles.css"
 import type { Ticket } from "@/types"
 import { TicketStatus, TICKET_STATUS_COLORS } from "@/types"
+import { Skeleton } from "@/components/shadcn/skeleton"
 
 const allColumns = [
   { key: "title", label: "Title" },
@@ -25,10 +26,11 @@ const allColumns = [
 ]
 
 interface TicketsTableProps {
-  tickets: Ticket[]
+  tickets: Ticket[],
+  isLoading?: boolean
 }
 
-export function TicketsTable({ tickets }: TicketsTableProps) {
+export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
   const [search, setSearch] = React.useState("")
   const [visibleCols, setVisibleCols] = React.useState(() => allColumns.map(col => col.key))
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
@@ -218,6 +220,7 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
         <div className="border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto w-full custom-scrollbar">
             <Table className="min-w-full table-fixed">
+              {/* Table coluumns header */}
               <TableHeader>
                 <TableRow className="bg-[#073567eb] hover:bg-[#073567eb] border-none">
                   {/* Checkbox column */}
@@ -275,7 +278,6 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                         
                         </span>
                         {/* Resize handle */}
-                        {/* {idx !== arr.length - 1 && ( */}
                           <ResizableBox
                             width={colWidths[col.key]}
                             height={0}
@@ -302,17 +304,52 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                               setColWidths(cw => ({ ...cw, [col.key]: size.width }))
                             }
                             draggableOpts={{ enableUserSelectHack: false }}
-                          >
-                            <div />
-                          </ResizableBox>
-                        {/* )} */}
+                          />
+                          <div />
                       </div>
                     </TableHead>
                   ))}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredTickets.map(ticket => (
+                {
+                isLoading?
+                [0,1,2,3,4,5,6,7,8].map(ticket => (
+                  <TableRow key={ticket} className="bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 border-b border-[var(--primary)]">
+                    {/* Checkbox cell */}
+                    <TableCell
+                      className="py-3 px-3 text-sm"
+                      style={{ width: 40, minWidth: 40, maxWidth: 40 }}
+                    >
+                      <input
+                        type="checkbox"
+                      />
+                    </TableCell>
+                    {/* Other cell */}
+                    {allColumns.filter(col => visibleCols.includes(col.key)).map((col, idx, arr) => (
+                      <TableCell
+                        key={col.key}
+                        className={
+                          "text-[#073567] font-semibold py-3 px-3 text-sm" +
+                          (idx !== arr.length - 1 ? " border-r border-[#073567]" : "")
+                        }
+                        style={{
+                          width: colWidths[col.key],
+                          minWidth: 140,
+                          // maxWidth: 500,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        <Skeleton className="w-full h-6 bg-[#073567] opacity-1 animate-pulse" />
+                      </TableCell>
+                    ))
+                    }
+                  </TableRow>
+                ))
+                :
+                filteredTickets.map(ticket => (
                   <TableRow key={ticket.id} className="bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 border-b border-[var(--primary)]">
                     {/* Checkbox cell */}
                     <TableCell
@@ -362,9 +399,11 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
                           ? (ticket[col.key as keyof Ticket] as string[]).join(", ")
                           : ticket[col.key as keyof Ticket]}
                       </TableCell>
-                    ))}
+                    ))
+                    }
                   </TableRow>
-                ))}
+                ))
+                }
               </TableBody>
             </Table>
           </div>
