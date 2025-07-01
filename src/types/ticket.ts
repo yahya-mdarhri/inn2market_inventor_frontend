@@ -13,7 +13,7 @@ export type Ticket = {
   created_at: string
 }
 
-// Ticket status enum for better type safety
+// Ticket status enum
 export enum TicketStatus {
   PENDING = "pending",
   APPROVED = "approved",
