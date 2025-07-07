@@ -3,13 +3,15 @@ import { Button } from "@shadcn/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@shadcn/avatar";
 import { MdAdd, MdNotifications } from 'react-icons/md';
 import './Header.css';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigator = useNavigate();
   return (
     <header className="header-container">
       <SidebarTrigger className='header-button box'/>
       <div className="left-actions">
-        <Button className='header-button'>
+        <Button className='header-button' onClick={ () => navigator('/tickets/create') }>
           <MdAdd  />
           create
         </Button>

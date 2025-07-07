@@ -5,7 +5,7 @@ import { Button } from "@/components/shadcn/button";
 import { Separator } from "@/components/shadcn/separator";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as yup from "yup";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, FileText, Info, Users, FileImage, BadgeCheck } from "lucide-react";
 
 // Use a textarea component or fallback to <textarea>
 const Textarea = (props: any) => (
@@ -68,14 +68,17 @@ export default function CreateTicket() {
   console.log("Formik values:", formik.values.inventors);
   return (
     <>
-      <Card className="w-full max-w-3xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-8">
+      <Card className="w-full max-w-7xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-8">
         <CardContent className="p-0">
           <FormikProvider value={formik}>
-            <form className="flex flex-col gap-6" onSubmit={formik.handleSubmit} noValidate>
+            <form className="flex flex-col gap-3" onSubmit={formik.handleSubmit} noValidate>
               <div>
-                <label className="block text-[#073567] font-semibold mb-1" htmlFor="title">
-                  Title <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <FileText className="w-5 h-5 text-[#073567]" />
+                  <label className="block text-[#073567] font-semibold" htmlFor="title">
+                    Title <span className="text-red-500">*</span>
+                  </label>
+                </div>
                 <Input
                   id="title"
                   name="title"
@@ -95,9 +98,12 @@ export default function CreateTicket() {
                 </div>
               </div>
               <div>
-                <label className="block text-[#073567] font-semibold mb-1" htmlFor="summary">
-                  Summary <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <Info className="w-5 h-5 text-[#073567]" />
+                  <label className="block text-[#073567] font-semibold" htmlFor="summary">
+                    Summary <span className="text-red-500">*</span>
+                  </label>
+                </div>
                 <Textarea
                   id="summary"
                   name="summary"
@@ -117,9 +123,12 @@ export default function CreateTicket() {
                 </div>
               </div>
               <div>
-                <label className="block text-[#073567] font-semibold mb-1" htmlFor="context">
-                  Context <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <BadgeCheck className="w-5 h-5 text-[#073567]" />
+                  <label className="block text-[#073567] font-semibold" htmlFor="context">
+                    Context <span className="text-red-500">*</span>
+                  </label>
+                </div>
                 <Textarea
                   id="context"
                   name="context"
@@ -139,9 +148,12 @@ export default function CreateTicket() {
                 </div>
               </div>
               <div>
-                <label className="block text-[#073567] font-semibold mb-1" htmlFor="problem_identification">
-                  Problem Identification <span className="text-red-500">*</span>
-                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <Info className="w-5 h-5 text-[#073567]" />
+                  <label className="block text-[#073567] font-semibold" htmlFor="problem_identification">
+                    Problem Identification <span className="text-red-500">*</span>
+                  </label>
+                </div>
                 <Textarea
                   id="problem_identification"
                   name="problem_identification"
@@ -161,9 +173,12 @@ export default function CreateTicket() {
                 </div>
               </div>
               <div>
-                <label className="block text-[#073567] font-semibold mb-1" htmlFor="drawings">
-                  Drawings (optional)
-                </label>
+                <div className="flex items-center gap-2 mb-1">
+                  <FileImage className="w-5 h-5 text-[#073567]" />
+                  <label className="block text-[#073567] font-semibold" htmlFor="drawings">
+                    Drawings (optional)
+                  </label>
+                </div>
                 <Input
                   id="drawings"
                   name="drawings"
@@ -185,9 +200,12 @@ export default function CreateTicket() {
               <FieldArray name="inventors">
                 {({ push, remove }) => (
                   <div>
-                    <label className="block text-[#073567] font-semibold mb-1">
-                      Inventors <span className="text-red-500">*</span>
-                    </label>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Users className="w-5 h-5 text-[#073567]" />
+                      <label className="block text-[#073567] font-semibold">
+                        Inventors <span className="text-red-500">*</span>
+                      </label>
+                    </div>
                     {formik.values.inventors.map((inv, idx) => (
                       <div key={idx} className="flex gap-2 mb-1 items-center">
                         <Input
@@ -200,24 +218,26 @@ export default function CreateTicket() {
                           className="bg-[#e6ecf3] flex-1"
                         />
                         {idx != formik.values.inventors.length - 1 && inv.trim() !== "" && (
-                          <Button
+                          <button
                             type="button"
                             onClick={() => remove(idx)}
-                            className="bg-red-500 hover:bg-red-700 text-white p-2 rounded-md flex items-center"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                             title="Remove inventor"
+                            aria-label="Remove inventor"
                           >
                             <Minus size={18} />
-                          </Button>
+                          </button>
                         )}
                         {idx === formik.values.inventors.length - 1 && inv.trim() !== "" && (
-                          <Button
+                          <button
                             type="button"
                             onClick={() => push("")}
-                            className="bg-[#073567] hover:bg-[#05294a] text-white p-2 rounded-md flex items-center"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                             title="Add inventor"
+                            aria-label="Add inventor"
                           >
                             <Plus size={18} />
-                          </Button>
+                          </button>
                         )}
                       </div>
                     ))}
@@ -233,7 +253,10 @@ export default function CreateTicket() {
               <FieldArray name="co_applications">
                 {({ push, remove }) => (
                   <div>
-                    <label className="block text-[#073567] font-semibold mb-1">Co-Applications (optional)</label>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Users className="w-5 h-5 text-[#073567]" />
+                      <label className="block text-[#073567] font-semibold">Co-Applications (optional)</label>
+                    </div>
                     {formik.values.co_applications.map((co, idx) => (
                       <div key={idx} className="flex gap-2 mb-1 items-center">
                         <Input
@@ -245,24 +268,26 @@ export default function CreateTicket() {
                           className="bg-[#e6ecf3] flex-1"
                         />
                         {idx === formik.values.co_applications.length - 1 && co.trim() !== "" && (
-                          <Button
+                          <button
                             type="button"
                             onClick={() => push("")}
-                            className="bg-[#073567] hover:bg-[#05294a] text-white p-2 rounded-md flex items-center"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                             title="Add co-applicant"
+                            aria-label="Add co-applicant"
                           >
                             <Plus size={18} />
-                          </Button>
+                          </button>
                         )}
                         {idx !== formik.values.co_applications.length - 1 && co.trim() !== ""  && (
-                          <Button
+                          <button
                             type="button"
                             onClick={() => remove(idx)}
-                            className="bg-red-500 hover:bg-red-700 text-white p-2 rounded-md flex items-center"
+                            className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                             title="Remove co-applicant"
+                            aria-label="Remove co-applicant"
                           >
                             <Minus size={18} />
-                          </Button>
+                          </button>
                         )}
                       </div>
                     ))}
