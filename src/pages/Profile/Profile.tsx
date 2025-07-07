@@ -9,6 +9,7 @@ import { useAuth } from '@context/UserContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TICKET_STATUS_COLORS, TicketStatus, type Ticket } from '@/types';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 
 const coinventors = [
@@ -84,7 +85,13 @@ const Profile = () => {
   }, [setTickets])
 
   return (
-  <>
+    <>
+      <Helmet>
+        <title>Profile | Inventor Portal</title>
+        <meta property="og:title" content="Profile | Inventor Portal" />
+        <meta name="description" content="View and edit your inventor profile, see your patents, and manage your account information." />
+        <meta property="og:description" content="View and edit your inventor profile, see your patents, and manage your account information." />
+      </Helmet>
 
     {/* Profile Hero*/}
     <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto justify-center gap-6 lg:gap-12 lg:h-[220px]">

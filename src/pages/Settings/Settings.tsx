@@ -4,6 +4,7 @@ import { Button } from '@shadcn/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@shadcn/avatar';
 import { MdLanguage, MdNotifications, MdSecurity, MdPerson, MdEdit, MdSettings } from "react-icons/md";
 import { useState, useRef, useEffect } from 'react';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 const affiliationOptions = [
   { value: "CIE", label: "CIE" },
@@ -32,6 +33,12 @@ const Settings = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Settings | Inventor Portal</title>
+        <meta property="og:title" content="Settings | Inventor Portal" />
+        <meta name="description" content="Manage your inventor portal settings, preferences, and account details." />
+        <meta property="og:description" content="Manage your inventor portal settings, preferences, and account details." />
+      </Helmet>
       <div className="flex flex-col w-full max-w-4xl mx-auto justify-center gap-6 mt-8 pb-8">
         {/* Profile Settings Section */}
         <Card className="bg-[#b7c7d8] rounded-2xl shadow-lg overflow-hidden">

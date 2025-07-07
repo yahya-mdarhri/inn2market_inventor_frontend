@@ -6,6 +6,7 @@ import { Separator } from "@/components/shadcn/separator";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as yup from "yup";
 import { Plus, Minus, FileText, Info, Users, FileImage, BadgeCheck } from "lucide-react";
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 // Use a textarea component or fallback to <textarea>
 const Textarea = (props: any) => (
@@ -68,6 +69,12 @@ export default function CreateTicket() {
   console.log("Formik values:", formik.values.inventors);
   return (
     <>
+      <Helmet>
+        <title>Create Ticket | Inventor Portal</title>
+        <meta property="og:title" content="Create Ticket | Inventor Portal" />
+        <meta name="description" content="Submit a new patent ticket for your invention. Provide details and track your submission." />
+        <meta property="og:description" content="Submit a new patent ticket for your invention. Provide details and track your submission." />
+      </Helmet>
       <Card className="w-full max-w-7xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-8">
         <CardContent className="p-0">
           <FormikProvider value={formik}>

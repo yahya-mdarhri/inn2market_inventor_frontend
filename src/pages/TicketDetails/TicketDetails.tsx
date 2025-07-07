@@ -6,6 +6,7 @@ import axios from "axios";
 import { FileText, Users, Calendar, Info, FileImage, BadgeCheck, Clock, CheckCircle, XCircle, Pencil, Trash2, Trash } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 const STATUS_COLORS: Record<string, string> = {
   pending: `${TICKET_STATUS_COLORS.pending.bg} ${TICKET_STATUS_COLORS.pending.text}`,
@@ -35,6 +36,12 @@ export default function TicketDetails() {
   if (loading) {
     return (
       <>
+        <Helmet>
+          <title>Ticket Details | Inventor Portal</title>
+          <meta property="og:title" content="Ticket Details | Inventor Portal" />
+          <meta name="description" content="View details and status of your patent ticket. Track progress and updates for your invention." />
+          <meta property="og:description" content="View details and status of your patent ticket. Track progress and updates for your invention." />
+        </Helmet>
         <Card className="w-full max-w-7xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-0 mt-10">
           <CardHeader className="flex flex-row justify-between px-8">
               <div>
@@ -165,6 +172,12 @@ export default function TicketDetails() {
 
   return (
     <>
+      <Helmet>
+        <title>Ticket Details | Inventor Portal</title>
+        <meta property="og:title" content="Ticket Details | Inventor Portal" />
+        <meta name="description" content="View details and status of your patent ticket. Track progress and updates for your invention." />
+        <meta property="og:description" content="View details and status of your patent ticket. Track progress and updates for your invention." />
+      </Helmet>
       <Card className="w-full max-w-7xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-0 mt-10">
         <CardHeader className="flex flex-row justify-between px-8">
           <div>

@@ -8,6 +8,7 @@ import heroImage from './images/welcome-image.png';
 import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/avatar';
 import { MdAddCircle, MdEdit, MdPersonAdd, MdCheckCircle } from "react-icons/md";
 import { useAuth } from "@context/UserContext";
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 const stats = [
   { label: 'Patents', value: 12, icon: FileText },
@@ -79,6 +80,12 @@ const Dashboard = () => {
   const {user} = useAuth();
   return (
     <>
+    <Helmet>
+      <title>Dashboard | Inventor Portal</title>
+      <meta property="og:title" content="Dashboard | Inventor Portal" />
+      <meta name="description" content="View your inventor dashboard, recent activities, and manage your patent tickets." />
+      <meta property="og:description" content="View your inventor dashboard, recent activities, and manage your patent tickets." />
+    </Helmet>
     <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto justify-center gap-6 lg:gap-12">
       {/* Welcome card */}
       <Card className="flex items-center bg-[#073567] rounded-2xl px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-10 w-full lg:w-2/3 max-h-none lg:max-h-[305px] shadow-lg">
@@ -104,7 +111,7 @@ const Dashboard = () => {
         </div>
       </Card>
       {/* Stats cards column on the right */}
-      <div className="flex flex-1 flex-row lg:flex-col gap-5 lg:gap-4 w-full lg:w-auto">
+      <div className="flex flex-1 justify-between flex-row lg:flex-col gap-5 lg:gap-4 w-full lg:w-auto">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
