@@ -18,8 +18,8 @@ const validationSchema = yup.object({
   context: yup.string().required("Context is required"),
   problem_identification: yup.string().required("Problem identification is required"),
   drawings: yup.mixed().notRequired(),
-  inventors: yup.array().of(yup.string().required("Inventor is required")).min(1, "At least one inventor is required"),
-  co_applications: yup.array().of(yup.string().notRequired()),
+  inventors: yup.array().of(yup.string()),
+  co_applications: yup.array().of(yup.string()),
 });
 
 export default function CreateTicket() {
@@ -221,7 +221,7 @@ export default function CreateTicket() {
                           <button
                             type="button"
                             onClick={() => remove(idx)}
-                            className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
+                            className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
                             title="Remove inventor"
                             aria-label="Remove inventor"
                           >
@@ -232,7 +232,7 @@ export default function CreateTicket() {
                           <button
                             type="button"
                             onClick={() => push("")}
-                            className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                             title="Add inventor"
                             aria-label="Add inventor"
                           >

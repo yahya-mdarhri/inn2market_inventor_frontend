@@ -167,14 +167,14 @@ export default function TicketDetails() {
     <>
       <Card className="w-full max-w-7xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-0 mt-10">
         <CardHeader className="flex flex-row justify-between px-8">
-            <div>
-              <h2 className="text-3xl font-bold text-[#073567] flex items-center gap-2">
-                <FileText className="inline-block w-7 h-7 text-[#073567]" />
-                {ticket.title}
-              </h2>
-            </div>
+          <div>
+            <h2 className="text-3xl font-bold text-[#073567] flex items-center gap-2">
+              <FileText className="inline-block w-7 h-7 text-[#073567]" />
+              {ticket.title}
+            </h2>
+          </div>
             <div className="flex items-center gap-3">
-             <span
+            <span
                className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-semibold text-sm shadow-sm border ${STATUS_COLORS[ticket.status] || "bg-gray-200 text-gray-700"}`}
              >
                {ticket.status === "pending" && (
@@ -192,8 +192,8 @@ export default function TicketDetails() {
                    <XCircle className="w-4 h-4 text-red-800 font-bold" />
                  </span>
                )}
-               {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
-             </span>
+              {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
+            </span>
              <button
                aria-label="Edit Ticket"
                title="Edit Ticket"
@@ -210,7 +210,7 @@ export default function TicketDetails() {
              >
                <Trash className="w-5 h-5" />
              </button>
-            </div>
+          </div>
         </CardHeader>
         {/* <Separator className="mb-4" /> */}
 
