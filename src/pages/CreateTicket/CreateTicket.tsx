@@ -1,0 +1,309 @@
+import { useState, useRef } from "react";
+import { Card, CardContent } from "@/components/shadcn/card";
+import { Input } from "@/components/shadcn/input";
+import { Button } from "@/components/shadcn/button";
+import { Separator } from "@/components/shadcn/separator";
+import { useFormik, FieldArray, FormikProvider } from "formik";
+import * as yup from "yup";
+import { Plus, Minus } from "lucide-react";
+
+// Use a textarea component or fallback to <textarea>
+const Textarea = (props: any) => (
+  <textarea {...props} className={`bg-[#e6ecf3] rounded-lg p-2 w-full border border-gray-255 focus:outline-none focus:ring-2 focus:ring-[#073567] ${props.className || ""}`} />
+);
+
+const validationSchema = yup.object({
+  title: yup.string().required("Title is required"),
+  summary: yup.string().required("Summary is required"),
+  context: yup.string().required("Context is required"),
+  problem_identification: yup.string().required("Problem identification is required"),
+  drawings: yup.mixed().notRequired(),
+  inventors: yup.array().of(yup.string().required("Inventor is required")).min(1, "At least one inventor is required"),
+  co_applications: yup.array().of(yup.string().notRequired()),
+});
+
+export default function CreateTicket() {
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [drawingPreview, setDrawingPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      summary: "",
+      context: "",
+      problem_identification: "",
+      drawings: null as File | null,
+      inventors: [""],
+      co_applications: [""],
+    },
+    validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      setSubmitting(true);
+      setSuccess(false);
+      setTimeout(() => {
+        setSubmitting(false);
+        setSuccess(true);
+        resetForm();
+        setDrawingPreview(null);
+      }, 1200);
+    },
+  });
+
+  // Drawing preview handler
+  const handleDrawingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.currentTarget.files?.[0];
+    formik.setFieldValue("drawings", file || null);
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (ev) => setDrawingPreview(ev.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setDrawingPreview(null);
+    }
+  };
+
+
+  console.log("Formik values:", formik.values.inventors);
+  return (
+    <>
+      <Card className="w-full max-w-3xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-8">
+        <CardContent className="p-0">
+          <FormikProvider value={formik}>
+            <form className="flex flex-col gap-6" onSubmit={formik.handleSubmit} noValidate>
+              <div>
+                <label className="block text-[#073567] font-semibold mb-1" htmlFor="title">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <Input
+                  id="title"
+                  name="title"
+                  value={formik.values.title}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Enter invention title"
+                  required
+                  className="bg-[#e6ecf3]"
+                  maxLength={100}
+                />
+                <div className="flex justify-between">
+                  {formik.touched.title && formik.errors.title && (
+                    <div className="text-red-600 text-sm">{formik.errors.title}</div>
+                  )}
+                  <span className="text-xs text-gray-500 ml-auto">{formik.values.title.length}/100</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[#073567] font-semibold mb-1" htmlFor="summary">
+                  Summary <span className="text-red-500">*</span>
+                </label>
+                <Textarea
+                  id="summary"
+                  name="summary"
+                  value={formik.values.summary}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Brief summary of the invention"
+                  required
+                  rows={3}
+                  maxLength={255}
+                />
+                <div className="flex justify-between">
+                  {formik.touched.summary && formik.errors.summary && (
+                    <div className="text-red-600 text-sm">{formik.errors.summary}</div>
+                  )}
+                  <span className="text-xs text-gray-500 ml-auto">{formik.values.summary.length}/255</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[#073567] font-semibold mb-1" htmlFor="context">
+                  Context <span className="text-red-500">*</span>
+                </label>
+                <Textarea
+                  id="context"
+                  name="context"
+                  value={formik.values.context}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Background and context"
+                  required
+                  rows={3}
+                  maxLength={255}
+                />
+                <div className="flex justify-between">
+                  {formik.touched.context && formik.errors.context && (
+                    <div className="text-red-600 text-sm">{formik.errors.context}</div>
+                  )}
+                  <span className="text-xs text-gray-500 ml-auto">{formik.values.context.length}/255</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[#073567] font-semibold mb-1" htmlFor="problem_identification">
+                  Problem Identification <span className="text-red-500">*</span>
+                </label>
+                <Textarea
+                  id="problem_identification"
+                  name="problem_identification"
+                  value={formik.values.problem_identification}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="What problem does this invention solve?"
+                  required
+                  rows={3}
+                  maxLength={255}
+                />
+                <div className="flex justify-between">
+                  {formik.touched.problem_identification && formik.errors.problem_identification && (
+                    <div className="text-red-600 text-sm">{formik.errors.problem_identification}</div>
+                  )}
+                  <span className="text-xs text-gray-500 ml-auto">{formik.values.problem_identification.length}/255</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[#073567] font-semibold mb-1" htmlFor="drawings">
+                  Drawings (optional)
+                </label>
+                <Input
+                  id="drawings"
+                  name="drawings"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleDrawingChange}
+                  className="bg-[#e6ecf3]"
+                  ref={fileInputRef}
+                />
+                {drawingPreview && (
+                  <div className="mt-2">
+                    <img src={drawingPreview} alt="Drawing preview" className="max-h-40 rounded-lg border" />
+                  </div>
+                )}
+                {formik.touched.drawings && formik.errors.drawings && (
+                  <div className="text-red-600 text-sm">{formik.errors.drawings as string}</div>
+                )}
+              </div>
+              <FieldArray name="inventors">
+                {({ push, remove }) => (
+                  <div>
+                    <label className="block text-[#073567] font-semibold mb-1">
+                      Inventors <span className="text-red-500">*</span>
+                    </label>
+                    {formik.values.inventors.map((inv, idx) => (
+                      <div key={idx} className="flex gap-2 mb-1 items-center">
+                        <Input
+                          name={`inventors[${idx}]`}
+                          value={inv}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          placeholder="Inventor name or email"
+                          required={idx === 0}
+                          className="bg-[#e6ecf3] flex-1"
+                        />
+                        {idx != formik.values.inventors.length - 1 && inv.trim() !== "" && (
+                          <Button
+                            type="button"
+                            onClick={() => remove(idx)}
+                            className="bg-red-500 hover:bg-red-700 text-white p-2 rounded-md flex items-center"
+                            title="Remove inventor"
+                          >
+                            <Minus size={18} />
+                          </Button>
+                        )}
+                        {idx === formik.values.inventors.length - 1 && inv.trim() !== "" && (
+                          <Button
+                            type="button"
+                            onClick={() => push("")}
+                            className="bg-[#073567] hover:bg-[#05294a] text-white p-2 rounded-md flex items-center"
+                            title="Add inventor"
+                          >
+                            <Plus size={18} />
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                    {formik.touched.inventors && typeof formik.errors.inventors === "string" && (
+                      <div className="text-red-600 text-sm">{formik.errors.inventors}</div>
+                    )}
+                    {Array.isArray(formik.errors.inventors) && formik.errors.inventors.map((err, idx) =>
+                      err ? <div key={idx} className="text-red-600 text-sm">{err}</div> : null
+                    )}
+                  </div>
+                )}
+              </FieldArray>
+              <FieldArray name="co_applications">
+                {({ push, remove }) => (
+                  <div>
+                    <label className="block text-[#073567] font-semibold mb-1">Co-Applications (optional)</label>
+                    {formik.values.co_applications.map((co, idx) => (
+                      <div key={idx} className="flex gap-2 mb-1 items-center">
+                        <Input
+                          name={`co_applications[${idx}]`}
+                          value={co}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          placeholder="Co-applicant name or email"
+                          className="bg-[#e6ecf3] flex-1"
+                        />
+                        {idx === formik.values.co_applications.length - 1 && co.trim() !== "" && (
+                          <Button
+                            type="button"
+                            onClick={() => push("")}
+                            className="bg-[#073567] hover:bg-[#05294a] text-white p-2 rounded-md flex items-center"
+                            title="Add co-applicant"
+                          >
+                            <Plus size={18} />
+                          </Button>
+                        )}
+                        {idx !== formik.values.co_applications.length - 1 && co.trim() !== ""  && (
+                          <Button
+                            type="button"
+                            onClick={() => remove(idx)}
+                            className="bg-red-500 hover:bg-red-700 text-white p-2 rounded-md flex items-center"
+                            title="Remove co-applicant"
+                          >
+                            <Minus size={18} />
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </FieldArray>
+              <div className="flex gap-4 mt-4">
+                <Button
+                  type="submit"
+                  className="bg-[var(--primary)] text-white font-bold rounded-lg px-6 py-2 hover:bg-[#bdbd00]"
+                  disabled={submitting || !formik.isValid || !formik.dirty}
+                >
+                  {submitting ? (
+                    <span className="flex items-center gap-2">
+                      <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                      </svg>
+                      Submitting...
+                    </span>
+                  ) : "Submit Ticket"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border border-[#073567] text-[#073567] font-bold rounded-lg px-6 py-2"
+                  onClick={() => {
+                    formik.resetForm();
+                    setDrawingPreview(null);
+                    fileInputRef.current?.value && (fileInputRef.current.value = "");
+                  }}
+                  disabled={submitting}
+                >
+                  Clear
+                </Button>
+              </div>
+              {success && <div className="text-green-600 mt-2">Ticket submitted successfully!</div>}
+            </form>
+          </FormikProvider>
+        </CardContent>
+      </Card>
+    </>
+  );
+}
