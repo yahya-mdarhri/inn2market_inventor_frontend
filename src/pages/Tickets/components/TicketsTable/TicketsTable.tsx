@@ -114,7 +114,7 @@ export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
     link.setAttribute("download", "tickets.csv")
     document.body.appendChild(link)
     link.click()
-    document.body.removeChild(link)
+    document.body.removeChild(link) 
   }
 
   // Export to Excel (only selected if any, else all)
@@ -221,7 +221,7 @@ export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
         {/* Table section */}
         <div className="border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto w-full custom-scrollbar">
-            <Table className="min-w-full table-fixed">
+            <Table>
               {/* Table coluumns header */}
               <TableHeader>
                 <TableRow className="bg-[#073567eb] hover:bg-[#073567eb] border-none">

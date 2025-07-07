@@ -23,10 +23,10 @@ export function Tickets() {
   }, [setTickets])
 
   return (
-    <>
+    <div className="w-full max-w-[78rem] flex flex-col">
       <TicketsHero tickets={tickets} isLoading={isLoading}/>
       <TicketsTable tickets={tickets} isLoading={isLoading}/>
-    </>
+    </div>
   )
 }
 
