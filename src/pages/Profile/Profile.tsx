@@ -1,71 +1,15 @@
 import { Card, CardContent } from '@shadcn/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@shadcn/avatar';
 // import { Separator } from '@shadcn/separator';
-import { FileText, Users, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { FileText, Users, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 import { Button } from '@shadcn/button';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@shadcn/table';
 import './Profile.css';
 import { useAuth } from '@context/UserContext';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { TICKET_STATUS_COLORS, TicketStatus, type Ticket } from '@/types';
 
-
-const tickets = [
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  // Repeat for demo
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-];
 
 const coinventors = [
   {
@@ -125,6 +69,19 @@ const coinventors = [
 
 const Profile = () => {
   const { user } = useAuth();
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
+
+  useEffect(() => {
+    axios.get<Ticket[]>('/api/inventors/tickets')
+      .then(response => {
+        setTickets(response.data)
+        setIsLoading(false)
+      })
+      .catch(error => {
+        console.error("Error fetching tickets:", error)
+      })
+  }, [setTickets])
 
   return (
   <>
@@ -206,23 +163,38 @@ const Profile = () => {
                         <div className="flex -space-x-2 sm:-space-x-3">
                           {ticket.inventors.slice(0, 4).map((inv, i) => (
                             <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-8 h-8 sm:w-10 sm:h-10" style={{ zIndex:  i + 1 }}>
-                              <AvatarImage src={inv.img} alt={inv.name} />
-                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.name}</AvatarFallback>
+                              <AvatarImage src="https://github.com/shadcn.png" alt={inv} />
+                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2)}</AvatarFallback>
                             </Avatar>
                           ))}
-                          <Avatar className="border rounded border-[#D1D600] bg-white shadow w-8 h-8 sm:w-10 sm:h-10" style={{ zIndex:  ticket.inventors.length }}>
-                             <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
-                              +{ticket.inventors.length - 4}
-                            </AvatarFallback>
-                          </Avatar>
+                          {ticket.inventors.length > 4 && (
+                            <Avatar className="border rounded border-[#D1D600] bg-white shadow w-8 h-8 sm:w-10 sm:h-10" style={{ zIndex:  ticket.inventors.length }}>
+                              <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
+                                +{ticket.inventors.length - 4}
+                              </AvatarFallback>
+                            </Avatar>
+                          )}
                         </div>
                       </div>
                     </TableCell>
                     <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                      <span className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-amber-100 text-amber-800 border border-amber-200">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                        {ticket.status}
-                      </span>
+                        <span
+                          className={
+                            "px-2 py-1 rounded-full text-xs font-bold " +
+                            (ticket.status === TicketStatus.PENDING
+                              ? TICKET_STATUS_COLORS[TicketStatus.PENDING].bg + " " + TICKET_STATUS_COLORS[TicketStatus.PENDING].text
+                              : ticket.status === TicketStatus.APPROVED
+                              ? TICKET_STATUS_COLORS[TicketStatus.APPROVED].bg + " " + TICKET_STATUS_COLORS[TicketStatus.APPROVED].text
+                              : ticket.status === TicketStatus.REFUSED
+                              ? TICKET_STATUS_COLORS[TicketStatus.REFUSED].bg + " " + TICKET_STATUS_COLORS[TicketStatus.REFUSED].text
+                              : "bg-gray-100 text-gray-800")
+                          }
+                        >
+                          {ticket.status === TicketStatus.PENDING && <Clock className="inline-block w-4 h-4 mr-1 align-text-bottom" />}
+                          {ticket.status === TicketStatus.APPROVED && <CheckCircle className="inline-block w-4 h-4 mr-1 align-text-bottom" />}
+                          {ticket.status === TicketStatus.REFUSED && <XCircle className="inline-block w-4 h-4 mr-1 align-text-bottom" />}
+                          {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
+                        </span>
                     </TableCell>
                   </TableRow>
                 ))}

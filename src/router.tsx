@@ -1,5 +1,4 @@
-
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Outlet } from 'react-router-dom';
 import ProtectedLayout from '@/layouts/ProtectedLayout/ProtectedLayout';
 
 import Dashboard from '@pages/Dashboard/Dashboard';
@@ -16,14 +15,16 @@ export const AppRouter = () => (
     {/* Public access routes */}
     <Route path="/login" element={<Login />} />
 
-    {/* Protexted acces routes */}
+    {/* Protected access routes */}
     <Route path="/" element={<ProtectedLayout />}>
       <Route index path='dashboard' element={<Dashboard />} />
       <Route path="profile" element={<Profile />} />
       <Route path="settings" element={<Settings />} />
-      <Route path="tickets" element={<Tickets />} />
-      <Route path="tickets/:id" element={<TicketDetails />} />
-      <Route path="tickets/create" element={<CreateTicket />} />
+      <Route path="tickets" element={<Outlet />}>
+        <Route index element={<Tickets />} />
+        <Route path="create" element={<CreateTicket />} />
+        <Route path=":id" element={<TicketDetails />} />
+      </Route>
     </Route>
   </Routes>
 )
