@@ -11,6 +11,7 @@ import "react-resizable/css/styles.css"
 import type { Ticket } from "@/types"
 import { TicketStatus, TICKET_STATUS_COLORS } from "@/types"
 import { Skeleton } from "@/components/shadcn/skeleton"
+import { useNavigate } from "react-router-dom"
 
 const allColumns = [
   { key: "title", label: "Title" },
@@ -45,6 +46,7 @@ export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
   })
   const [hoveredCol, setHoveredCol] = React.useState<string | null>(null)
   const [selected, setSelected] = React.useState<string[]>([])
+  const navigate = useNavigate()
 
   // Sorting logic
   const sortedTickets = React.useMemo(() => {
@@ -355,6 +357,7 @@ export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
                     <TableCell
                       className="py-3 px-3 text-sm"
                       style={{ width: 40, minWidth: 40, maxWidth: 40 }}
+                      onClick={e => e.stopPropagation()} // Prevent row click when clicking checkbox
                     >
                       <input
                         type="checkbox"
@@ -379,6 +382,8 @@ export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap"
                         }}
+                        onClick={() => navigate(`/tickets/${ticket.id}`)} // Navigate to ticket details on click
+                        aria-label={`View details for ticket ${ticket.title}`}
                       >
                         {col.key === "status" ? (
                           <span
