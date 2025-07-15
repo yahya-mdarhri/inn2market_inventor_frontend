@@ -10,7 +10,22 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TICKET_STATUS_COLORS, TicketStatus, type Ticket } from '@/types';
 import { Helmet } from '@dr.pogodin/react-helmet';
+import DataTable from '@ui/DataTable/DataTable';
 
+const columns = [
+  {
+    key: 'title',
+    label: 'Title',
+  },
+  {
+    key: 'sector',
+    label: 'Sector',
+  },
+  {
+    key: 'status',
+    label: 'Status',
+  },
+]
 
 const coinventors = [
   {
@@ -74,7 +89,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true);
 
   useEffect(() => {
-    axios.get<Ticket[]>('/api/inventors/tickets')
+    axios.get<Ticket[]>('/api/inventors/patents')
       .then(response => {
         setTickets(response.data)
         setIsLoading(false)
@@ -146,67 +161,11 @@ const Profile = () => {
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
         <div className="mt-4 border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tickets.map((ticket, idx) => (
-                  <TableRow 
-                    key={idx} 
-                    className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
-                      idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
-                    }`}
-                  >
-                    <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
-                      <div className="truncate max-w-[200px] sm:max-w-none">{ticket.title}</div>
-                    </TableCell>
-                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                      <div className="flex items-center">
-                        <div className="flex -space-x-2 sm:-space-x-3">
-                          {ticket.inventors.slice(0, 4).map((inv, i) => (
-                            <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-8 h-8 sm:w-10 sm:h-10" style={{ zIndex:  i + 1 }}>
-                              <AvatarImage src="https://github.com/shadcn.png" alt={inv} />
-                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2)}</AvatarFallback>
-                            </Avatar>
-                          ))}
-                          {ticket.inventors.length > 4 && (
-                            <Avatar className="border rounded border-[#D1D600] bg-white shadow w-8 h-8 sm:w-10 sm:h-10" style={{ zIndex:  ticket.inventors.length }}>
-                              <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
-                                +{ticket.inventors.length - 4}
-                              </AvatarFallback>
-                            </Avatar>
-                          )}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                        <span
-                          className={
-                            "px-2 py-1 rounded-full text-xs font-bold " +
-                            (ticket.status === TicketStatus.PENDING
-                              ? TICKET_STATUS_COLORS[TicketStatus.PENDING].bg + " " + TICKET_STATUS_COLORS[TicketStatus.PENDING].text
-                              : ticket.status === TicketStatus.APPROVED
-                              ? TICKET_STATUS_COLORS[TicketStatus.APPROVED].bg + " " + TICKET_STATUS_COLORS[TicketStatus.APPROVED].text
-                              : ticket.status === TicketStatus.REFUSED
-                              ? TICKET_STATUS_COLORS[TicketStatus.REFUSED].bg + " " + TICKET_STATUS_COLORS[TicketStatus.REFUSED].text
-                              : "bg-gray-100 text-gray-800")
-                          }
-                        >
-                          {ticket.status === TicketStatus.PENDING && <Clock className="inline-block w-4 h-4 mr-1 align-text-bottom" />}
-                          {ticket.status === TicketStatus.APPROVED && <CheckCircle className="inline-block w-4 h-4 mr-1 align-text-bottom" />}
-                          {ticket.status === TicketStatus.REFUSED && <XCircle className="inline-block w-4 h-4 mr-1 align-text-bottom" />}
-                          {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
-                        </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <DataTable
+              data={tickets}
+              colums={columns}
+
+            />
           </div>
         </div>
       </div>

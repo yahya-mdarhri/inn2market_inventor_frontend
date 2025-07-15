@@ -307,7 +307,6 @@ export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {
                             }
                             draggableOpts={{ enableUserSelectHack: false }}
                           />
-                          <div />
                       </div>
                     </TableHead>
                   ))}
