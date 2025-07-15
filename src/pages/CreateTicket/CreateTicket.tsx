@@ -7,6 +7,7 @@ import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as yup from "yup";
 import { Plus, Minus, FileText, Info, Users, FileImage, BadgeCheck } from "lucide-react";
 import { Helmet } from '@dr.pogodin/react-helmet';
+import axios from "axios";
 
 // Use a textarea component or fallback to <textarea>
 const Textarea = (props: any) => (
@@ -27,6 +28,7 @@ export default function CreateTicket() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [drawingPreview, setDrawingPreview] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // Add error state
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const formik = useFormik({
@@ -38,17 +40,54 @@ export default function CreateTicket() {
       drawings: null as File | null,
       inventors: [""],
       co_applications: [""],
+      is_draft: false,
     },
     validationSchema,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       setSubmitting(true);
       setSuccess(false);
-      setTimeout(() => {
+      setError(null);
+
+      try {
+        // Prepare data for backend
+        const formData: any = {
+          title: values.title,
+          summary: values.summary,
+          context: values.context,
+          problem_identification: values.problem_identification,
+          inventors: values.inventors.filter((inv) => inv.trim() !== ""),
+          co_applications: values.co_applications.filter((co) => co.trim() !== ""),
+          is_draft: values.is_draft,
+        };
+        // Handle drawings: if file, upload as base64 string
+        if (values.drawings) {
+          const toBase64 = (file: File) =>
+            new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => resolve(reader.result as string);
+              reader.onerror = (error) => reject(error);
+            });
+          formData.drawings = await toBase64(values.drawings);
+        } else {
+          formData.drawings = null;
+        }
+
+        // Send POST request
+        await axios.post("/api/inventors/ticket/create/", formData);
+
         setSubmitting(false);
         setSuccess(true);
         resetForm();
         setDrawingPreview(null);
-      }, 1200);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      } catch (err: any) {
+        setSubmitting(false);
+        setError(
+          err.response?.data?.error ||
+          "An error occurred while submitting the ticket."
+        );
+      }
     },
   });
 
@@ -332,6 +371,7 @@ export default function CreateTicket() {
                 </Button>
               </div>
               {success && <div className="text-green-600 mt-2">Ticket submitted successfully!</div>}
+              {error && <div className="text-red-600 mt-2">{error}</div>}
             </form>
           </FormikProvider>
         </CardContent>
