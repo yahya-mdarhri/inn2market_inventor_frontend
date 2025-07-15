@@ -28,7 +28,11 @@ const allColumns = [
 
 interface TicketsTableProps {
   tickets: Ticket[],
-  isLoading?: boolean
+  isLoading?: boolean,
+  count: number,
+  page: number,
+  pageSize: number,
+  onPageChange: (newPage: number) => void
 }
 
 export function TicketsTable({ tickets , isLoading}: TicketsTableProps) {

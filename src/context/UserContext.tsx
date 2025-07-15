@@ -31,7 +31,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Get and refresh user data
   const refreshUser = () => {
-    axios.get("/", { withCredentials: true })
+    axios.get("/api/accounts/me/")
     .then((res) => {
       setUser(res.data)
     })

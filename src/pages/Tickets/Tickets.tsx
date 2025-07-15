@@ -6,22 +6,35 @@ import type { Ticket } from "@/types"
 import axios from "axios"
 import { Helmet } from '@dr.pogodin/react-helmet'
 
-
 export function Tickets() {
   const [isLoading, setIsLoading] = useState(true)
   const [tickets, setTickets] = useState<Ticket[]>([])
+  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(100)
 
-  // Get tickets from API
-  useEffect(() => {
-    axios.get<Ticket[]>('/api/inventors/tickets')
+  // Get tickets from API with pagination
+  const fetchTickets = (pageNum = page, pageSz = pageSize) => {
+    setIsLoading(true)
+    axios.get(`/api/inventors/tickets/?page=${pageNum}&page_size=${pageSz}`)
       .then(response => {
-        setTickets(response.data)
+        setTickets(response.data.results)
+        setCount(response.data.count)
         setIsLoading(false)
       })
       .catch(error => {
         console.error("Error fetching tickets:", error)
+        setIsLoading(false)
       })
-  }, [setTickets])
+  }
+
+  useEffect(() => {
+    fetchTickets(page, pageSize)
+  }, [page, pageSize])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
 
   return (
     <>
@@ -33,7 +46,14 @@ export function Tickets() {
       </Helmet>
       <div className="w-full max-w-[78rem] flex flex-col">
         <TicketsHero tickets={tickets} isLoading={isLoading}/>
-        <TicketsTable tickets={tickets} isLoading={isLoading}/>
+        <TicketsTable 
+          tickets={tickets} 
+          isLoading={isLoading}
+          count={count}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   )
