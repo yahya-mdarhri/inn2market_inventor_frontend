@@ -9,6 +9,7 @@ type UserContextType = {
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
   loading?: boolean;
+  refreshUser?: () => void;
 }
 
 // User Context
@@ -69,7 +70,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
 
   return (
-    <UserContext.Provider value={{ user, setUser, login, logout, loading }}>
+    <UserContext.Provider value={{ user, setUser, login, logout, loading, refreshUser }}>
       {children}
     </UserContext.Provider>
   );
