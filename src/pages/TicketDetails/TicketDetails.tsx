@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { TICKET_STATUS_COLORS, type Ticket } from "@/types";
 import axios from "axios";
@@ -16,9 +16,11 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function TicketDetails() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -32,6 +34,20 @@ export default function TicketDetails() {
         setLoading(false);
       });
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this ticket? This action cannot be undone.")) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await axios.delete(`/api/inventors/ticket/${id}/`);
+      navigate("/tickets");
+    } catch (err) {
+      setDeleting(false);
+      alert("Failed to delete ticket.");
+    }
+  };
 
   if (loading) {
     return (
@@ -219,7 +235,8 @@ export default function TicketDetails() {
                aria-label="Delete Ticket"
                title="Delete Ticket"
                className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
-               onClick={() => {/* TODO: Implement delete action */}}
+               onClick={handleDelete}
+               disabled={deleting}
              >
                <Trash className="w-5 h-5" />
              </button>
