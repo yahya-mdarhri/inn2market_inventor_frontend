@@ -9,6 +9,21 @@ import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/avatar';
 import { MdAddCircle, MdEdit, MdPersonAdd, MdCheckCircle } from "react-icons/md";
 import { useAuth } from "@context/UserContext";
 import { Helmet } from '@dr.pogodin/react-helmet';
+import { useEffect, useState } from 'react';
+import axios from "axios";
+import { Skeleton } from "@/components/shadcn/skeleton";
+
+type Inventor = {
+  name: string;
+  img: string;
+};
+
+type Ticket = {
+  id: number;
+  title: string;
+  status: string;
+  inventors: Inventor[];
+};
 
 const stats = [
   { label: 'Patents', value: 12, icon: FileText },
@@ -16,68 +31,49 @@ const stats = [
   { label: 'Co-Inventors', value: 5, icon: Users },
 ];
 
-const tickets = [
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  // Repeat for demo
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-  {
-    title: 'Lorem ipsum dolor',
-    inventors: [
-      { name: 'A', img: '/avatars/1.png' },
-      { name: 'B', img: '/avatars/2.png' },
-      { name: 'C', img: '/avatars/3.png' },
-      { name: 'D', img: '/avatars/4.png' },
-      { name: 'E', img: '/avatars/5.png' },
-    ],
-    status: 'Pending',
-  },
-];
-
 const Dashboard = () => {
 
   const {user} = useAuth();
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchTicketsAndInventors() {
+      setLoading(true);
+      try {
+        const { data } = await axios.get("/api/inventors/tickets/");
+        const ticketResults = data.results || [];
+        const ticketsWithInventors: Ticket[] = await Promise.all(
+          ticketResults.map(async (ticket: any) => {
+            const inventors: Inventor[] = await Promise.all(
+              (ticket.inventors || []).map(async (invId: string) => {
+                try {
+                  const { data: inventor } = await axios.get(`/api/inventors/inventor/${invId}`);
+                  return {
+                    name: inventor.preferred_name || inventor.full_name || invId,
+                    img: inventor.avatar || "/avatars/default.png",
+                  };
+                } catch {
+                  return { name: invId, img: "/avatars/default.png" };
+                }
+              })
+            );
+            return {
+              id: ticket.id,
+              title: ticket.title,
+              status: ticket.status,
+              inventors,
+            };
+          })
+        );
+        setTickets(ticketsWithInventors);
+      } catch (err) {
+        setTickets([]);
+      }
+      setLoading(false);
+    }
+    fetchTicketsAndInventors();
+  }, []);
   return (
     <>
     <Helmet>
@@ -183,6 +179,46 @@ const Dashboard = () => {
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
         <div className="mt-4 border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
+            {loading ? (
+              
+                          <Table>
+              <TableHeader>
+                <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
+                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
+                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
+                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {[0,1.2,3,4,5].map((ticket, idx) => (
+                  <TableRow 
+                    key={idx} 
+                    className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
+                      idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
+                    }`}
+                  >
+                    <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
+                      <div className="truncate max-w-[150px] sm:max-w-[200px] lg:max-w-none">
+                        <Skeleton className="w-full h-6 sm:h-8 bg-[var(--primary)] rounded-lg" />
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                      <div className="flex items-center">
+                        <div className="flex -space-x-2 sm:-space-x-3">
+                          {[0,1,2,3].map((inv, i) => (
+                            <Skeleton key={i} className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-[var(--primary)] rounded-lg" />
+                          ))}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                      <Skeleton className="w-24 h-6 sm:h-8 bg-[var(--primary)] rounded inline-flex items-center justify-center text-xs sm:text-sm font-medium" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            ) : (
             <Table>
               <TableHeader>
                 <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
@@ -194,7 +230,7 @@ const Dashboard = () => {
               <TableBody>
                 {tickets.map((ticket, idx) => (
                   <TableRow 
-                    key={idx} 
+                    key={ticket.id || idx} 
                     className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
                       idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
                     }`}
@@ -208,14 +244,16 @@ const Dashboard = () => {
                           {ticket.inventors.slice(0, 4).map((inv, i) => (
                             <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  i + 1 }}>
                               <AvatarImage src={inv.img} alt={inv.name} />
-                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.name}</AvatarFallback>
+                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.name[0]}</AvatarFallback>
                             </Avatar>
                           ))}
-                          <Avatar className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  ticket.inventors.length }}>
-                             <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
-                              +{ticket.inventors.length - 4}
-                            </AvatarFallback>
-                          </Avatar>
+                          {ticket.inventors.length > 4 && (
+                            <Avatar className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  ticket.inventors.length }}>
+                              <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
+                                +{ticket.inventors.length - 4}
+                              </AvatarFallback>
+                            </Avatar>
+                          )}
                         </div>
                       </div>
                     </TableCell>
@@ -229,6 +267,7 @@ const Dashboard = () => {
                 ))}
               </TableBody>
             </Table>
+            )}
           </div>
         </div>
       </div>

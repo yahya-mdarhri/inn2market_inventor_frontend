@@ -19,7 +19,7 @@ export function CoInventorsHero({ total, affiliations }: CoInventorsHeroProps) {
   const moreCount = uniqueAffiliations.length - shownAffiliations.length;
 
   return (
-    <Card className="w-full max-w-7xl mx-auto mt-6 sm:mt-10 mb-8 border-0 shadow-xl bg-gradient-to-br from-[#073567] to-[#05294a]">
+    <Card className="w-full max-w-7xl mx-auto mb-8 border-0 shadow-xl bg-gradient-to-br from-[#073567] to-[#05294a]">
       <CardHeader className="pb-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex-1">
