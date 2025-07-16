@@ -7,6 +7,7 @@ import { FileText, Users, Calendar, Info, FileImage, BadgeCheck, Clock, CheckCir
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { Helmet } from '@dr.pogodin/react-helmet';
+import type { Inventor } from "@/types/user";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: `${TICKET_STATUS_COLORS.pending.bg} ${TICKET_STATUS_COLORS.pending.text}`,
@@ -21,6 +22,8 @@ export default function TicketDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [inventorDetails, setInventorDetails] = useState<Record<string, Inventor | null>>({});
+  const [inventorsLoading, setInventorsLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -34,6 +37,24 @@ export default function TicketDetails() {
         setLoading(false);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (!ticket || !ticket.inventors || ticket.inventors.length === 0) return;
+    setInventorsLoading(true);
+    const fetchInventor = (invId: string) =>
+      axios.get<Inventor>(`/api/inventors/inventor/${invId}`)
+        .then(res => res.data)
+        .catch(() => null);
+    Promise.all(ticket.inventors.map(invId => fetchInventor(invId as unknown as string)))
+      .then(results => {
+        const details: Record<string, Inventor | null> = {};
+        ticket.inventors.forEach((invId, idx) => {
+          details[invId as unknown as string] = results[idx];
+        });
+        setInventorDetails(details);
+        setInventorsLoading(false);
+      });
+  }, [ticket]);
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this ticket? This action cannot be undone.")) {
@@ -200,50 +221,51 @@ export default function TicketDetails() {
             <h2 className="text-3xl font-bold text-[#073567] flex items-center gap-2">
               <FileText className="inline-block w-7 h-7 text-[#073567]" />
               {ticket.title}
+              {ticket.is_draft && (
+                <span className="ml-3 px-2 py-1 rounded-full bg-yellow-200 text-yellow-900 text-xs font-semibold border border-yellow-300">Draft</span>
+              )}
             </h2>
           </div>
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <span
-               className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-semibold text-sm shadow-sm border ${STATUS_COLORS[ticket.status] || "bg-gray-200 text-gray-700"}`}
-             >
-               {ticket.status === "pending" && (
-                 <span className="flex items-center justify-center rounded-full p-1 mr-1">
-                   <Clock className="w-4 h-4 text-yellow-800 font-bold" />
-                 </span>
-               )}
-               {ticket.status === "approved" && (
-                 <span className="flex items-center justify-center rounded-full p-1 mr-1">
-                   <CheckCircle className="w-4 h-4 text-green-800 font-bold" />
-                 </span>
-               )}
-               {ticket.status === "refused" && (
-                 <span className="flex items-center justify-center rounded-full p-1 mr-1">
-                   <XCircle className="w-4 h-4 text-red-800 font-bold" />
-                 </span>
-               )}
+              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-semibold text-sm shadow-sm border ${STATUS_COLORS[ticket.status] || "bg-gray-200 text-gray-700"}`}
+            >
+              {ticket.status === "pending" && (
+                <span className="flex items-center justify-center rounded-full p-1 mr-1">
+                  <Clock className="w-4 h-4 text-yellow-800 font-bold" />
+                </span>
+              )}
+              {ticket.status === "approved" && (
+                <span className="flex items-center justify-center rounded-full p-1 mr-1">
+                  <CheckCircle className="w-4 h-4 text-green-800 font-bold" />
+                </span>
+              )}
+              {ticket.status === "refused" && (
+                <span className="flex items-center justify-center rounded-full p-1 mr-1">
+                  <XCircle className="w-4 h-4 text-red-800 font-bold" />
+                </span>
+              )}
               {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
             </span>
-             <button
-               aria-label="Edit Ticket"
-               title="Edit Ticket"
-               className="ml-2 flex items-center justify-center w-9 h-9 rounded-full bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-               onClick={() => {/* TODO: Implement edit navigation */}}
-             >
-               <Pencil className="w-5 h-5" />
-             </button>
-             <button
-               aria-label="Delete Ticket"
-               title="Delete Ticket"
-               className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
-               onClick={handleDelete}
-               disabled={deleting}
-             >
-               <Trash className="w-5 h-5" />
-             </button>
+            <button
+              aria-label="Edit Ticket"
+              title="Edit Ticket"
+              className="ml-2 flex items-center justify-center w-9 h-9 rounded-full bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+              onClick={() => {/* TODO: Implement edit navigation */}}
+            >
+              <Pencil className="w-5 h-5" />
+            </button>
+            <button
+              aria-label="Delete Ticket"
+              title="Delete Ticket"
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              <Trash className="w-5 h-5" />
+            </button>
           </div>
         </CardHeader>
-        {/* <Separator className="mb-4" /> */}
-
         <CardContent className="p-0 px-8 pb-8">
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="flex-1 flex items-center bg-white rounded-xl p-4 shadow-sm border border-blue-100 gap-3 min-w-[220px]">
@@ -267,16 +289,13 @@ export default function TicketDetails() {
               </div>
             )}
           </div>
-
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-1">
                 <Info className="w-5 h-5 text-[#073567]" />
                 <span className="font-semibold text-[#073567]">Summary</span>
               </div>
-              <div className="ml-7">
-                {ticket.summary}
-              </div>
+              <div className="ml-7">{ticket.summary}</div>
             </div>
             <div className="bg-white rounded-xl p-4 shadow-sm">
               <div className="flex items-center gap-2 mb-1">
@@ -305,6 +324,26 @@ export default function TicketDetails() {
                 </div>
               </div>
             )}
+            <div className="bg-white rounded-xl p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-1">
+                <Users className="w-5 h-5 text-[#073567]" />
+                <span className="font-semibold text-[#073567]">Inventors</span>
+              </div>
+              <div className="ml-7 flex flex-wrap gap-2">
+                {inventorsLoading ? (
+                  <Skeleton className="h-6 w-32 rounded animate-pulse bg-[#a3b8d8]" />
+                ) : (
+                  ticket.inventors.map((invId, idx) => {
+                    const inv = inventorDetails[invId as unknown as string];
+                    return (
+                      <span key={idx} className="inline-block bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm font-semibold">
+                        {inv?.preferred_name || inv?.email || invId}
+                      </span>
+                    );
+                  })
+                )}
+              </div>
+            </div>
             {ticket.co_applications && ticket.co_applications.length > 0 && (
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-1">

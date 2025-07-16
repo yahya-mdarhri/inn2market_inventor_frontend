@@ -11,6 +11,7 @@ export type Ticket = {
   status: string
   meeting_date?: string
   created_at: string
+  is_draft: boolean
 }
 
 // Ticket status enum
