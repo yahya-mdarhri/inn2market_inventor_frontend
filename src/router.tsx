@@ -10,6 +10,7 @@ import CreateTicket from './pages/CreateTicket/CreateTicket';
 import TicketDetails from './pages/TicketDetails/TicketDetails';
 import CoInventors from './pages/CoInventors/CoInventors';
 import Patents from '@pages/Patents/Patents';
+import PatentDetails from '@pages/PatentDetails/PatentDetails';
 
 
 export const AppRouter = () => (
@@ -28,7 +29,10 @@ export const AppRouter = () => (
         <Route path=":id" element={<TicketDetails />} />
       </Route>
       <Route path="coinventors" element={<CoInventors />} />
-      <Route path="patents" element={<Patents />} />
+      <Route path="patents" element={<Outlet />} >
+        <Route index element={<Patents />} />
+        <Route path=":id" element={<PatentDetails />} />
+      </Route>
     </Route>
   </Routes>
 )
