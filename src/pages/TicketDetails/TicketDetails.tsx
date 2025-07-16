@@ -251,7 +251,7 @@ export default function TicketDetails() {
                 <Calendar className="w-6 h-6 text-[#073567]" />
               </div>
               <div>
-                <div className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Created</div>
+                <div className="text-xs text-[#073567] font-semibold uppercase tracking-wide">Created</div>
                 <div className="text-[#073567] font-bold text-lg">{new Date(ticket.created_at).toLocaleString()}</div>
               </div>
             </div>

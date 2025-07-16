@@ -1,0 +1,17 @@
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #073567 #e2e8f0;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  @apply bg-slate-200 rounded-lg h-[10px];
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-[#073567] rounded-lg transition-colors;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#05294a];
+}

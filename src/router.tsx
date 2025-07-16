@@ -9,6 +9,7 @@ import Login from '@pages/Login/Login';
 import CreateTicket from './pages/CreateTicket/CreateTicket';
 import TicketDetails from './pages/TicketDetails/TicketDetails';
 import CoInventors from './pages/CoInventors/CoInventors';
+import Patents from '@pages/Patents/Patents';
 
 
 export const AppRouter = () => (
@@ -27,6 +28,7 @@ export const AppRouter = () => (
         <Route path=":id" element={<TicketDetails />} />
       </Route>
       <Route path="coinventors" element={<CoInventors />} />
+      <Route path="patents" element={<Patents />} />
     </Route>
   </Routes>
 )

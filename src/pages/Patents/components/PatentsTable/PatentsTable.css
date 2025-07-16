@@ -1,0 +1,39 @@
+/* TicketsTable specific styles */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #073567 #b7c7d8;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #b7c7d8;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #073567;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #05294a;
+}
+
+/* Table row hover effects */
+.table-row-hover {
+  transition: background-color 0.2s ease;
+}
+
+/* Resize handle styles */
+.resize-handle {
+  cursor: col-resize;
+  user-select: none;
+}
+
+.resize-handle:hover {
+  background-color: rgba(7, 53, 103, 0.1);
+}

@@ -1,0 +1,9 @@
+/* TicketsHero specific styles */
+.tickets-hero-stats {
+  transition: all 0.3s ease;
+}
+
+.tickets-hero-stats:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}

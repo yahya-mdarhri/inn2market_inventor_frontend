@@ -11,93 +11,54 @@ import axios from 'axios';
 import { TICKET_STATUS_COLORS, TicketStatus, type Ticket } from '@/types';
 import { Helmet } from '@dr.pogodin/react-helmet';
 import DataTable from '@ui/DataTable/DataTable';
+import { type Patent } from '@/types/patent'; 
+import { type Inventor } from '@/types/user';
 
 const columns = [
-  {
-    key: 'title',
-    label: 'Title',
-  },
-  {
-    key: 'sector',
-    label: 'Sector',
-  },
-  {
-    key: 'status',
-    label: 'Status',
-  },
-]
-
-const coinventors = [
-  {
-    name: 'Dr. Sarah Johnson',
-    role: 'Lead Researcher',
-    avatar: '/avatars/sarah.png',
-    initials: 'SJ',
-  },
-  {
-    name: 'Prof. Michael Chen',
-    role: 'Technical Advisor',
-    avatar: '/avatars/michael.png',
-    initials: 'MC',
-  },
-  {
-    name: 'Dr. Emily Rodriguez',
-    role: 'Patent Specialist',
-    avatar: '/avatars/emily.png',
-    initials: 'ER',
-  },
-  {
-    name: 'Prof. David Kim',
-    role: 'Research Partner',
-    avatar: '/avatars/david.png',
-    initials: 'DK',
-  },
-  {
-    name: 'Dr. Lisa Thompson',
-    role: 'Innovation Consultant',
-    avatar: '/avatars/lisa.png',
-    initials: 'LT',
-  },
-  {
-    name: 'Prof. James Wilson',
-    role: 'Technical Lead',
-    avatar: '/avatars/james.png',
-    initials: 'JW',
-  },  {
-    name: 'Prof. David Kim',
-    role: 'Research Partner',
-    avatar: '/avatars/david.png',
-    initials: 'DK',
-  },
-  {
-    name: 'Dr. Lisa Thompson',
-    role: 'Innovation Consultant',
-    avatar: '/avatars/lisa.png',
-    initials: 'LT',
-  },
-  {
-    name: 'Prof. James Wilson',
-    role: 'Technical Lead',
-    avatar: '/avatars/james.png',
-    initials: 'JW',
-  },
+  { key: 'title', label: 'Title' },
+  { key: 'sector', label: 'Sector' },
+  { key: 'status', label: 'Status' },
 ];
 
 const Profile = () => {
   const { user } = useAuth();
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [patents, setPatents] = useState<Patent[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [coInventors, setCoInventors] = useState<Inventor[]>([]);
+  const [isLoadingCoInventors, setIsLoadingCoInventors] = useState(true);
 
   useEffect(() => {
-    axios.get<Ticket[]>('/api/inventors/patents')
+    setIsLoading(true);
+    axios.get<Patent[]>('/api/inventors/patents', {
+      params: { page, page_size: pageSize }
+    })
       .then(response => {
-        setTickets(response.data)
+        const data:Patent[] = response.data?.results || [];
+        setPatents(data);
         setIsLoading(false)
       })
       .catch(error => {
-        console.error("Error fetching tickets:", error)
+        console.error("Error fetching patents:", error)
+        setIsLoading(false)
       })
-  }, [setTickets])
+  }, [page, pageSize]);
+
+  useEffect(() => {
+    setIsLoadingCoInventors(true);
+    axios.get('/api/inventors/inventor/co-inventors', {
+      params: { page: 1, page_size: 10 }
+    })
+      .then(response => {
+        setCoInventors(response.data.results || []);
+        setIsLoadingCoInventors(false);
+      })
+      .catch(error => {
+        console.error("Error fetching co-inventors:", error);
+        setIsLoadingCoInventors(false);
+      });
+  }, []);
 
   return (
     <>
@@ -162,7 +123,7 @@ const Profile = () => {
         <div className="mt-4 border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
             <DataTable
-              data={tickets}
+              data={patents}
               colums={columns}
 
             />
@@ -183,20 +144,28 @@ const Profile = () => {
         </Button>
       </div>
       <div className="flex flex-wrap gap-3 sm:gap-4 p-4 sm:p-6 lg:p-8">
-        {coinventors.map((inventor, idx) => (
-          <Card key={idx} className="bg-[var(--primary)] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 flex-1 min-w-[32%] max-w-full sm:max-w-[48%] lg:max-w-[31%] xl:max-w-[23%]">
-            <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 lg:p-6">
-              <Avatar className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 border-2 border-[#D1D600] rounded-xl flex-shrink-0">
-                <AvatarImage src={inventor.avatar} alt={inventor.name} />
-                <AvatarFallback className="text-xs sm:text-sm lg:text-base font-bold text-[#073567] bg-white rounded">{inventor.initials}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-white font-bold text-sm sm:text-base lg:text-lg mb-1 truncate leading-tight">{inventor.name}</h4>
-                <p className="text-white opacity-90 text-xs sm:text-sm font-medium truncate leading-tight">{inventor.role}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {isLoadingCoInventors ? (
+          <div>Loading...</div>
+        ) : coInventors.length === 0 ? (
+          <div>No co-inventors found.</div>
+        ) : (
+          coInventors.map((inventor, idx) => (
+            <Card key={inventor.id} className="bg-[var(--primary)] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 flex-1 min-w-[32%] max-w-full sm:max-w-[48%] lg:max-w-[31%] xl:max-w-[23%]">
+              <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 lg:p-6">
+                <Avatar className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 border-2 border-[#D1D600] rounded-xl flex-shrink-0">
+                  <AvatarImage src={inventor.image && inventor.image !== "/NULL" ? inventor.image : undefined} alt={inventor.preferred_name} />
+                  <AvatarFallback className="text-xs sm:text-sm lg:text-base font-bold text-[#073567] bg-white rounded">
+                    {inventor.preferred_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-white font-bold text-sm sm:text-base lg:text-lg mb-1 truncate leading-tight">{inventor.preferred_name}</h4>
+                  <p className="text-white opacity-90 text-xs sm:text-sm font-medium truncate leading-tight">{inventor.affiliation || 'No affiliation'}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </Card>
 
