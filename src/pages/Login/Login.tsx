@@ -90,6 +90,17 @@ const Auth: React.FC = () => {
                 className="w-full p-3 border border-[#3b82f6]/30 rounded-lg bg-[#1e3a8a]/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
               />
             </div>
+            {isLogin && (
+              <div className="mb-4 text-right">
+                <button
+                  type="button"
+                  onClick={() => navigate('/forgot-password')}
+                  className="text-xs text-indigo-300 hover:text-indigo-200 font-medium focus:outline-none"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
             {!isLogin && (
               <div className="mb-6">
                 <input

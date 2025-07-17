@@ -11,12 +11,16 @@ import TicketDetails from './pages/TicketDetails/TicketDetails';
 import CoInventors from './pages/CoInventors/CoInventors';
 import Patents from '@pages/Patents/Patents';
 import PatentDetails from '@pages/PatentDetails/PatentDetails';
+import ForgotPassword from '@pages/ForgotPassword/ForgotPassword';
+import ResetPassword from '@pages/ResetPassword/ResetPassword';
 
 
 export const AppRouter = () => (
   <Routes>
     {/* Public access routes */}
     <Route path="/login" element={<Login />} />
+    <Route path="/forgot-password" element={<ForgotPassword />} />
+    <Route path="/reset-password/:uidb64/:token" element={<ResetPassword />} />
 
     {/* Protected access routes */}
     <Route path="/" element={<ProtectedLayout />}>
