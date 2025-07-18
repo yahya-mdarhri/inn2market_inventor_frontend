@@ -12,6 +12,7 @@ import { Helmet } from '@dr.pogodin/react-helmet';
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { Skeleton } from "@/components/shadcn/skeleton";
+import { formatDistanceToNow } from "date-fns";
 
 type Inventor = {
   name: string;
@@ -25,6 +26,22 @@ type Ticket = {
   inventors: Inventor[];
 };
 
+type Activity = {
+  id: number;
+  action: string;
+  activity_type: string;
+  created_at: string;
+};
+
+const activityTypeIcon: Record<string, React.ElementType> = {
+  create: MdAddCircle,
+  update: MdEdit,
+  add: MdPersonAdd,
+  approve: MdCheckCircle,
+  // fallback/default
+  default: MdEdit,
+};
+
 const stats = [
   { label: 'Patents', value: 12, icon: FileText },
   { label: 'Tickets', value: 34, icon: Ticket },
@@ -36,6 +53,8 @@ const Dashboard = () => {
   const {user} = useAuth();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loadingActivities, setLoadingActivities] = useState(true);
 
   useEffect(() => {
     async function fetchTicketsAndInventors() {
@@ -73,6 +92,20 @@ const Dashboard = () => {
       setLoading(false);
     }
     fetchTicketsAndInventors();
+  }, []);
+
+  useEffect(() => {
+    async function fetchActivities() {
+      setLoadingActivities(true);
+      try {
+        const { data } = await axios.get("/api/accounts/activity-logs/");
+        setActivities(data.results || []);
+      } catch (err) {
+        setActivities([]);
+      }
+      setLoadingActivities(false);
+    }
+    fetchActivities();
   }, []);
   return (
     <>
@@ -135,32 +168,46 @@ const Dashboard = () => {
         <ul className="relative">
           {/* Vertical timeline line */}
           <div className="absolute left-3 top-0 bottom-0 w-1 bg-[#D1D600] rounded-full opacity-30" style={{ zIndex: 0 }} />
-          {[
-            { activity: "You created a new ticket: 'Patent for Widget X'", time: "2 hours ago", icon: MdAddCircle },
-            { activity: "Ticket 'Lorem ipsum dolor' was updated", time: "5 hours ago", icon: MdEdit },
-            { activity: "Added co-inventor B to ticket 'Lorem ipsum dolor'", time: "1 day ago", icon: MdPersonAdd },
-            { activity: "Patent 'Super Widget' was approved", time: "2 days ago", icon: MdCheckCircle },
-          ].map((item, idx) => {
-            const Icon = item.icon;
-            return (
+          {loadingActivities ? (
+            // Skeletons for loading state
+            Array.from({ length: 4 }).map((_, idx) => (
               <li
                 key={idx}
-                className={`relative flex flex-col sm:flex-row sm:items-center pl-12 pr-4 py-3 sm:py-4 group hover:bg-[#e6ecf3] rounded-xl transition-colors duration-150`}
+                className="relative flex flex-col sm:flex-row sm:items-center pl-12 pr-4 py-3 sm:py-4 group"
                 style={{ zIndex: 1 }}
               >
-                {/* Timeline dot with icon */}
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-[#D1D600] text-white rounded-full shadow-md border-2 sm:border-4 border-white">
-                  <Icon size={16} className="sm:w-6 sm:h-6" />
-                </span>
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-[#D1D600] rounded-full animate-pulse" />
                 <div className="flex-1 mb-2 sm:mb-0">
-                  <span className="text-[#073567] font-semibold text-sm sm:text-base">{item.activity}</span>
+                  <Skeleton className="w-48 h-5 rounded-lg bg-[var(--primary)]" />
                 </div>
-                <span className="ml-0 sm:ml-4 px-2 sm:px-3 py-1 rounded-full bg-[#073567] text-white text-xs font-medium opacity-80 w-fit">
-                  {item.time}
-                </span>
+                <Skeleton className="ml-0 sm:ml-4 w-20 h-5 rounded-full bg-[var(--primary)]" />
               </li>
-            );
-          })}
+            ))
+          ) : activities.length === 0 ? (
+            <li className="pl-12 py-6 text-[#073567] opacity-70">No recent activities found.</li>
+          ) : (
+            activities.map((item) => {
+              const Icon = activityTypeIcon[item.activity_type] || activityTypeIcon.default;
+              return (
+                <li
+                  key={item.id}
+                  className="relative flex flex-col sm:flex-row sm:items-center pl-12 pr-4 py-3 sm:py-4 group hover:bg-[#e6ecf3] rounded-xl transition-colors duration-150"
+                  style={{ zIndex: 1 }}
+                >
+                  {/* Timeline with icon */}
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-8 sm:h-8 flex items-center justify-center bg-[#D1D600] text-white rounded-full shadow-md border-1 sm:border-2 border-white">
+                    <Icon size={10} className="sm:w-6 sm:h-6" />
+                  </span>
+                  <div className="flex-1 mb-2 sm:mb-0">
+                    <span className="text-[#073567] font-semibold text-sm sm:text-base">{item.action}</span>
+                  </div>
+                  <span className="ml-0 sm:ml-4 px-2 sm:px-3 py-1 rounded-full bg-[#073567] text-white text-xs font-medium opacity-80 w-fit">
+                    {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
+                  </span>
+                </li>
+              );
+            })
+          )}
         </ul>
       </div>
     </Card>
