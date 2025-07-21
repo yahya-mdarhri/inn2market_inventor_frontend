@@ -13,6 +13,7 @@ import Patents from '@pages/Patents/Patents';
 import PatentDetails from '@pages/PatentDetails/PatentDetails';
 import ForgotPassword from '@pages/ForgotPassword/ForgotPassword';
 import ResetPassword from '@pages/ResetPassword/ResetPassword';
+import CreateAccount from '@pages/CreateAccount';
 
 
 export const AppRouter = () => (
@@ -21,6 +22,7 @@ export const AppRouter = () => (
     <Route path="/login" element={<Login />} />
     <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/reset-password/:uidb64/:token" element={<ResetPassword />} />
+    <Route path="/create-account" element={<CreateAccount />} />
 
     {/* Protected access routes */}
     <Route path="/" element={<ProtectedLayout />}>
