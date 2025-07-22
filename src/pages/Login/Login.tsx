@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from '@dr.pogodin/react-helmet';
@@ -6,7 +6,7 @@ import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 const Auth: React.FC = () => {
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +14,12 @@ const Auth: React.FC = () => {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +54,6 @@ const Auth: React.FC = () => {
       setSubmitting(false);
       return;
     }
-    // Add signup logic here, then setSubmitting(false) when done
     setSubmitting(false);
   };
 
