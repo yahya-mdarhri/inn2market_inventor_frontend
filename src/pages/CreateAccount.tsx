@@ -42,7 +42,6 @@ export default function CreateAccount() {
   const [success, setSuccess] = useState<null | { email: string; password: string }>(null);
   const [affiliations, setAffiliations] = useState<{id: string, name: string, parent_id?: string}[]>([]);
   const [affiliationsLoading, setAffiliationsLoading] = useState(true);
-  const navigate = useNavigate();
   const [sharedPasswordSaved, setSharedPasswordSaved] = useState<string | null>(null);
   const [newVariant, setNewVariant] = useState('');
 
@@ -62,6 +61,7 @@ export default function CreateAccount() {
   }, []);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       shared_password: sharedPasswordSaved || '',
       inventor: initialInventor,
