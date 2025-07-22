@@ -9,6 +9,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useAuth } from '@/context/UserContext';
+import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 const affiliationOptions = [
   { value: "CIE", label: "CIE" },
@@ -304,9 +305,9 @@ const Settings = () => {
 
               {/* Save Button */}
               <div className="flex justify-end pt-4">
-                <Button type="submit" className="bg-[#073567] text-white font-bold rounded-lg px-6 py-2.5 hover:bg-[#05294a] min-w-[120px]" disabled={loading}>
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </Button>
+                <LoadingButton type="submit" className="bg-[#073567] text-white font-bold rounded-lg px-6 py-2.5 hover:bg-[#05294a] min-w-[120px]" loading={loading} loadingText="Saving..." disabled={loading}>
+                  Save Changes
+                </LoadingButton>
               </div>
               {success && <div className="text-green-600 text-sm text-right">Profile updated successfully!</div>}
               {error && <div className="text-red-600 text-sm text-right">{error}</div>}
@@ -368,9 +369,9 @@ const Settings = () => {
                   <div className="text-red-600 text-sm">{passwordFormik.errors.confirm_password}</div>
                 )}
               </div>
-              <Button type="submit" className="bg-[#073567] text-white font-bold rounded-lg px-4 py-2 mt-2 w-fit hover:bg-[#05294a]" disabled={loading}>
-                {loading ? 'Updating...' : 'Update Password'}
-              </Button>
+              <LoadingButton type="submit" className="bg-[#073567] text-white font-bold rounded-lg px-4 py-2 mt-2 w-fit hover:bg-[#05294a]" loading={loading} loadingText="Updating..." disabled={loading}>
+                Update Password
+              </LoadingButton>
               {success && <div className="text-green-600 text-sm text-right">Password changed successfully!</div>}
               {error && <div className="text-red-600 text-sm text-right">{error}</div>}
             </form>
@@ -420,9 +421,9 @@ const Settings = () => {
 
         {/* Save All Changes Button */}
         <div className="flex justify-end">
-          <Button className="bg-[#073567] text-white font-bold rounded-lg px-6 py-3 text-lg hover:bg-[#05294a]">
+          <LoadingButton className="bg-[#073567] text-white font-bold rounded-lg px-6 py-3 text-lg hover:bg-[#05294a]" loading={loading} loadingText="Saving..." disabled={loading}>
             Save All Changes
-          </Button>
+          </LoadingButton>
         </div>
       </div>
     </>

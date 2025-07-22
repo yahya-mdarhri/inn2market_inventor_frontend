@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
+import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 export async function managerCreateInventorAccount(shared_password: string, inventor: any) {
   return axios.post('/api/accounts/create-account/', {
@@ -278,13 +279,15 @@ export default function CreateAccount() {
                 </button>
               </div>
             </div>
-            <button
+            <LoadingButton
               type="submit"
               className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 font-semibold"
+              loading={loading || formik.isSubmitting}
+              loadingText="Creating..."
               disabled={loading || formik.isSubmitting}
             >
-              {loading || formik.isSubmitting ? 'Creating...' : 'Create Account'}
-            </button>
+              Create Account
+            </LoadingButton>
           </form>
         </div>
       </div>

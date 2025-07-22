@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Helmet } from '@dr.pogodin/react-helmet';
+import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -49,13 +50,15 @@ const ForgotPassword: React.FC = () => {
                 autoFocus
               />
             </div>
-            <button
+            <LoadingButton
               type="submit"
               className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 font-semibold disabled:opacity-60"
+              loading={loading}
+              loadingText="Sending..."
               disabled={loading}
             >
-              {loading ? 'Sending...' : 'Send Reset Link'}
-            </button>
+              Send Reset Link
+            </LoadingButton>
           </form>
         </div>
       </div>

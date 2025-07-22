@@ -2,12 +2,12 @@ import { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/shadcn/card";
 import { Input } from "@/components/shadcn/input";
 import { Button } from "@/components/shadcn/button";
-import { Separator } from "@/components/shadcn/separator";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as yup from "yup";
 import { Plus, Minus, FileText, Info, Users, FileImage, BadgeCheck } from "lucide-react";
 import { Helmet } from '@dr.pogodin/react-helmet';
 import axios from "axios";
+import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 // Use a textarea component or fallback to <textarea>
 const Textarea = (props: any) => (
@@ -341,21 +341,15 @@ export default function CreateTicket() {
                 )}
               </FieldArray>
               <div className="flex gap-4 mt-4">
-                <Button
+                <LoadingButton
                   type="submit"
                   className="bg-[var(--primary)] text-white font-bold rounded-lg px-6 py-2 hover:bg-[#bdbd00]"
-                  disabled={submitting || !formik.isValid || !formik.dirty}
+                  loading={submitting}
+                  loadingText="Submitting..."
+                  disabled={!formik.isValid || !formik.dirty}
                 >
-                  {submitting ? (
-                    <span className="flex items-center gap-2">
-                      <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-                      </svg>
-                      Submitting...
-                    </span>
-                  ) : "Submit Ticket"}
-                </Button>
+                  Submit Ticket
+                </LoadingButton>
                 <Button
                   type="button"
                   variant="outline"

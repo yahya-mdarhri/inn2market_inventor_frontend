@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from '@dr.pogodin/react-helmet';
+import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 const Auth: React.FC = () => {
 
@@ -11,41 +12,44 @@ const Auth: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
+    setSubmitting(true);
     if (!email || !password) {
       setError('Please fill in all fields');
+      setSubmitting(false);
       return;
     }
-
     login({ email, password })
       .then(() => {
         navigate('/dashboard');
       })
       .catch((err) => {
         setError(err.response?.data?.detail || 'Login failed');
-      });
-
+      })
+      .finally(() => setSubmitting(false));
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
+    setSubmitting(true);
     if (!email || !password || !confirmPassword) {
       setError('Please fill in all fields');
+      setSubmitting(false);
       return;
     }
-
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      setSubmitting(false);
       return;
     }
-
+    // Add signup logic here, then setSubmitting(false) when done
+    setSubmitting(false);
   };
 
   const toggleForm = () => {
@@ -112,12 +116,15 @@ const Auth: React.FC = () => {
                 />
               </div>
             )}
-            <button
+            <LoadingButton
               type="submit"
               className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 font-semibold"
+              loading={submitting}
+              loadingText={isLogin ? 'Logging in...' : 'Signing up...'}
+              disabled={submitting || !email || !password || (!isLogin && !confirmPassword)}
             >
               {isLogin ? 'Login' : 'Sign Up'}
-            </button>
+            </LoadingButton>
           </form>
           <p className="text-sm text-gray-300 mt-4 text-center">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}

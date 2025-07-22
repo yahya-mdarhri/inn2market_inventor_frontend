@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from '@dr.pogodin/react-helmet';
+import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 
 const ResetPassword: React.FC = () => {
   const { uidb64, token } = useParams<{ uidb64: string; token: string }>();
@@ -67,13 +68,15 @@ const ResetPassword: React.FC = () => {
                 required
               />
             </div>
-            <button
+            <LoadingButton
               type="submit"
               className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600 transition-colors duration-300 font-semibold disabled:opacity-60"
+              loading={loading}
+              loadingText="Resetting..."
               disabled={loading}
             >
-              {loading ? 'Resetting...' : 'Reset Password'}
-            </button>
+              Reset Password
+            </LoadingButton>
           </form>
         </div>
       </div>
