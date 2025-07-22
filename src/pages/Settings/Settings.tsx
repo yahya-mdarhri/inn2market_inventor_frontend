@@ -46,6 +46,7 @@ const Settings = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLUListElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Prefill form with user data
   const inventor = user?.inventor;
@@ -58,6 +59,7 @@ const Settings = () => {
       affiliation: inventor?.affiliation || '',
       orcid: inventor?.orcid || '',
       name_variants: inventor?.name_variant || [],
+      image: null,
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -65,15 +67,29 @@ const Settings = () => {
       setSuccess(false);
       setError(null);
       try {
-        const payload = {
-          preferred_name: values.preferred_name,
-          email: values.email,
-          phone_number: values.phone_number,
-          affiliation: values.affiliation,
-          orcid: values.orcid,
-          name_variants: values.name_variants,
-        };
-         await axios.put('/api/accounts/me/', payload);
+        let payload;
+        let config = {};
+        if (values.image) {
+          payload = new FormData();
+          payload.append('preferred_name', values.preferred_name);
+          payload.append('email', values.email);
+          payload.append('phone_number', values.phone_number);
+          payload.append('affiliation', values.affiliation);
+          payload.append('orcid', values.orcid);
+          values.name_variants.forEach((v: string, i: number) => payload.append(`name_variants[${i}]`, v));
+          payload.append('image', values.image);
+          config = { headers: { 'Content-Type': 'multipart/form-data' } };
+        } else {
+          payload = {
+            preferred_name: values.preferred_name,
+            email: values.email,
+            phone_number: values.phone_number,
+            affiliation: values.affiliation,
+            orcid: values.orcid,
+            name_variants: values.name_variants,
+          };
+        }
+        await axios.put('/api/accounts/me/', payload, config);
         setSuccess(true);
         if (refreshUser) refreshUser();
       } catch (err: any) {
@@ -128,7 +144,7 @@ const Settings = () => {
         <meta name="description" content="Manage your inventor portal settings, preferences, and account details." />
         <meta property="og:description" content="Manage your inventor portal settings, preferences, and account details." />
       </Helmet>
-      <div className="flex flex-col w-full max-w-4xl mx-auto justify-center gap-6 mt-8 pb-8">
+      <div className="flex flex-col w-full max-w-7xl mx-auto justify-center gap-6 mt-8 pb-8">
         {/* Profile Settings Section */}
         <Card className="bg-[#b7c7d8] rounded-2xl shadow-lg overflow-hidden">
           <CardContent className="flex flex-col gap-8 p-6">
@@ -136,18 +152,40 @@ const Settings = () => {
             <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[#073567]/10">
               <div className="relative group">
                 <Avatar className="h-28 w-28 border-2 rounded-2xl border-[#D1D600]">
-                  <AvatarImage src={inventor?.image || "https://github.com/shadcn.png"} />
+                  <AvatarImage src={formik.values.image ? URL.createObjectURL(formik.values.image) : inventor?.image || "https://github.com/shadcn.png"} />
                   <AvatarFallback className="rounded text-xl">{(inventor?.preferred_name || 'CN').slice(0,2).toUpperCase()}</AvatarFallback>
                 </Avatar>
-                <button className="absolute bottom-2 right-2 bg-[#073567] text-white p-2 rounded-full shadow-lg opacity-90 hover:opacity-100 transition-opacity">
+                <button
+                  className="absolute bottom-2 right-2 bg-[#073567] text-white p-2 rounded-full shadow-lg opacity-90 hover:opacity-100 transition-opacity"
+                  onClick={() => fileInputRef.current?.click()}
+                  type="button"
+                  disabled={loading}
+                >
                   <MdEdit className="w-4 h-4" />
                 </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={e => {
+                    if (e.target.files && e.target.files[0]) {
+                      formik.setFieldValue('image', e.target.files[0]);
+                    }
+                  }}
+                  disabled={loading}
+                />
               </div>
               <div className="text-center sm:text-left">
                 <h4 className="text-[#073567] text-lg font-bold mb-1">Profile Photo</h4>
                 <p className="text-gray-600 text-sm mb-3">Upload a professional photo for your profile</p>
                 <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                  <Button className="bg-[#073567] text-white text-sm font-bold rounded-lg px-4 py-2 hover:bg-[#05294a]">
+                  <Button
+                    className="bg-[#073567] text-white text-sm font-bold rounded-lg px-4 py-2 hover:bg-[#05294a]"
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={loading}
+                  >
                     Upload New
                   </Button>
                   <Button className="bg-transparent text-[#073567] text-sm font-bold rounded-lg px-4 py-2 border-2 border-[#073567] hover:bg-[#073567] hover:text-white transition-colors">
