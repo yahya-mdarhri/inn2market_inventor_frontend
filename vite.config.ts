@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     host: true,
+    port: 3000,
   },
   optimizeDeps: {
     include: ['date-fns'],

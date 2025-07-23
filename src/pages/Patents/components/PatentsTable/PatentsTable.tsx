@@ -8,23 +8,33 @@ import { Search, SlidersHorizontal, FileDown, FileSpreadsheet, FileText, ArrowUp
 import * as XLSX from "xlsx"
 import { ResizableBox } from "react-resizable"
 import "react-resizable/css/styles.css"
-import type { Patent } from "@/types/patent"
+import { type Patent } from "@/types/patent"
 import { TicketStatus, TICKET_STATUS_COLORS, type Inventor } from "@/types"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useNavigate } from "react-router-dom"
 
 const allColumns = [
   { key: "title", label: "Title" },
-  { key: "summary", label: "Summary" },
-  { key: "context", label: "Context" },
-  { key: "problem_identification", label: "Problem Identification" },
-  { key: "drawings", label: "Drawings" },
-  { key: "inventors", label: "Inventors" },
-  { key: "co_applications", label: "Co-Applications" },
+  { key: "deposit_number", label: "Deposit Number" },
+  { key: "deposit_document", label: "Deposit Document" },
+  { key: "deposit_date", label: "Deposit Date" },
+  { key: "research_report_document", label: "Research Report Document" },
+  { key: "research_report_result", label: "Research Result" },
+  { key: "research_report_date", label: "Research Date" },
+  { key: "delivery_document", label: "Delivery Document" },
+  { key: "delivery_date", label: "Delivery Date" },
   { key: "status", label: "Status" },
-  { key: "meeting_date", label: "Meeting Date" },
-  { key: "created_at", label: "Created At" },
-]
+  { key: "TRL_level", label: "TRL Level" },
+  { key: "CRL_level", label: "CRL Level" },
+  { key: "abstract", label: "Abstract" },
+  { key: "contract_type", label: "Contract Type" },
+  { key: "sector", label: "Sector" },
+  { key: "nature", label: "Nature" },
+  { key: "schemas", label: "Schemas" },
+  { key: "affiliation", label: "Affiliation" },
+  // { key: "inventors", label: "Inventors" },
+];
+
 
 interface PatentsTableProps {
   patents: Patent[],
@@ -73,7 +83,7 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
   }, [patents, sortKey, sortDirection])
 
   // Filter patents by title or inventor name
-  const filteredPatents = sortedPatents.filter(patent =>
+  const filteredPatents:Patent[] = sortedPatents.filter(patent =>
     patent.title.toLowerCase().includes(search.toLowerCase()) ||
     patent.inventors.some((inv: Inventor) => inv.preferred_name.toLowerCase().includes(search.toLowerCase()))
   )
@@ -358,7 +368,7 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
                   </TableRow>
                 ))
                 :
-                filteredPatents.map(patent => (
+                filteredPatents.map((patent:Patent) => (
                   <TableRow key={patent.id} className="bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 border-b border-[var(--primary)]">
                     {/* Checkbox cell */}
                     <TableCell
@@ -407,7 +417,9 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
                           >
                             {patent.status.charAt(0).toUpperCase() + patent.status.slice(1)}
                           </span>
-                        ) : Array.isArray(patent[col.key as keyof Patent])}
+                        ) :
+                         (patent as any)[col.key]
+                        }
                       </TableCell>
                     ))
                     }

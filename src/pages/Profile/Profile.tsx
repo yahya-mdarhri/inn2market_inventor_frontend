@@ -96,14 +96,14 @@ const Profile = () => {
             <FileText className="text-white w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
             <span className="text-white text-base sm:text-lg font-semibold">Patents</span>
           </div>
-          <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">15</span>
+          <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">{user?.inventor?.patents_count}</span>
         </Card>
         <Card className="flex flex-row items-center justify-between bg-[#073567] rounded-xl px-4 sm:px-6 py-3 sm:py-4 flex-1 h-auto lg:h-0 lg:min-h-0 lg:max-h-full">
           <div className="flex items-center gap-2 sm:gap-3">
             <Users className="text-white w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
             <span className="text-white text-base sm:text-lg font-semibold">Coinventors</span>
           </div>
-          <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">15</span>
+          <span className="text-[#D1D600] text-xl sm:text-2xl font-bold">{user?.inventor?.co_inventors_count}</span>
         </Card>
       </div>
     </div>
