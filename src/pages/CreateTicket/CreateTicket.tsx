@@ -8,6 +8,8 @@ import { Plus, Minus, FileText, Info, Users, FileImage, BadgeCheck } from "lucid
 import { Helmet } from '@dr.pogodin/react-helmet';
 import axios from "axios";
 import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
+import { type Inventor } from "@/types/user";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
 
 // Use a textarea component or fallback to <textarea>
 const Textarea = (props: any) => (
@@ -31,6 +33,13 @@ export default function CreateTicket() {
   const [error, setError] = useState<string | null>(null); // Add error state
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [inventorSearch, setInventorSearch] = useState("");
+  const [inventorSuggestions, setInventorSuggestions] = useState<Inventor[]>([]);
+  const [inventorLoading, setInventorLoading] = useState(false);
+  const [inventorPage, setInventorPage] = useState(1);
+  const [inventorHasMore, setInventorHasMore] = useState(false);
+  const [selectedInventors, setSelectedInventors] = useState<Inventor[]>([]);
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -38,7 +47,7 @@ export default function CreateTicket() {
       context: "",
       problem_identification: "",
       drawings: null as File | null,
-      inventors: [""],
+      inventors: [] as string[], // store only UUIDs
       co_applications: [""],
       is_draft: false,
     },
@@ -49,32 +58,31 @@ export default function CreateTicket() {
       setError(null);
 
       try {
-        // Prepare data for backend
-        const formData: any = {
-          title: values.title,
-          summary: values.summary,
-          context: values.context,
-          problem_identification: values.problem_identification,
-          inventors: values.inventors.filter((inv) => inv.trim() !== ""),
-          co_applications: values.co_applications.filter((co) => co.trim() !== ""),
-          is_draft: values.is_draft,
-        };
-        // Handle drawings: if file, upload as base64 string
+        // Prepare FormData for backend
+        const formData = new FormData();
+        formData.append("title", values.title);
+        formData.append("summary", values.summary);
+        formData.append("context", values.context);
+        formData.append("problem_identification", values.problem_identification);
+        formData.append("is_draft", values.is_draft ? "true" : "false");
+        selectedInventors.forEach((inv) => formData.append("inventors", inv.id));
+
+        // Append co_applications
+        values.co_applications
+          .filter((co) => co.trim() !== "")
+          .forEach((co) => formData.append("co_applications", co));
+
+        // Append drawings if present
         if (values.drawings) {
-          const toBase64 = (file: File) =>
-            new Promise<string>((resolve, reject) => {
-              const reader = new FileReader();
-              reader.readAsDataURL(file);
-              reader.onload = () => resolve(reader.result as string);
-              reader.onerror = (error) => reject(error);
-            });
-          formData.drawings = await toBase64(values.drawings);
-        } else {
-          formData.drawings = null;
+          formData.append("drawings", values.drawings);
         }
 
-        // Send POST request
-        await axios.post("/api/inventors/ticket/create/", formData);
+        // Send POST request with multipart/form-data
+        await axios.post("/api/inventors/ticket/create/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         setSubmitting(false);
         setSuccess(true);
@@ -104,8 +112,39 @@ export default function CreateTicket() {
     }
   };
 
+  const fetchInventorSuggestions = async (query: string, page = 1, pageSize = 10) => {
+    setInventorLoading(true);
+    try {
+      const res = await axios.post(
+        `/api/inventors/inventors/search/?page=${page}&page_size=${pageSize}`,
+        { name: query }
+      );
+      // The response is paginated: { count, page, page_size, results: [...] }
+      const results = Array.isArray(res.data.results) ? res.data.results : [];
+      setInventorSuggestions(page === 1 ? results : prev => [...prev, ...results]);
+      setInventorHasMore(results.length === pageSize); // If we got a full page, there may be more
+      setInventorPage(page);
+    } catch (e) {
+      setInventorSuggestions([]);
+      setInventorHasMore(false);
+    }
+    setInventorLoading(false);
+  };
 
-  console.log("Formik values:", formik.values.inventors);
+  const handleAddInventor = (user: Inventor, push: (uuid: string) => void) => {
+    if (!formik.values.inventors.includes(user.id)) {
+      push(user.id);
+      setSelectedInventors((prev) => [...prev, user]);
+    }
+    setInventorSearch("");
+    setInventorSuggestions([]);
+    setInventorHasMore(false);
+  };
+  const handleRemoveInventor = (idx: number) => {
+    const uuid = formik.values.inventors[idx];
+    setSelectedInventors((prev) => prev.filter((inv) => inv.id !== uuid));
+  };
+
   return (
     <>
       <Helmet>
@@ -222,7 +261,7 @@ export default function CreateTicket() {
                 <div className="flex items-center gap-2 mb-1">
                   <FileImage className="w-5 h-5 text-[#073567]" />
                   <label className="block text-[#073567] font-semibold" htmlFor="drawings">
-                    Drawings (optional)
+                    Drawings <span className="text-red-500">*</span>
                   </label>
                 </div>
                 <Input
@@ -230,6 +269,7 @@ export default function CreateTicket() {
                   name="drawings"
                   type="file"
                   accept="image/*"
+                  required
                   onChange={handleDrawingChange}
                   className="bg-[#e6ecf3]"
                   ref={fileInputRef}
@@ -249,50 +289,84 @@ export default function CreateTicket() {
                     <div className="flex items-center gap-2 mb-1">
                       <Users className="w-5 h-5 text-[#073567]" />
                       <label className="block text-[#073567] font-semibold">
-                        Inventors <span className="text-red-500">*</span>
+                        Inventors
                       </label>
                     </div>
-                    {formik.values.inventors.map((inv, idx) => (
-                      <div key={idx} className="flex gap-2 mb-1 items-center">
-                        <Input
-                          name={`inventors[${idx}]`}
-                          value={inv}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          placeholder="Inventor name or email"
-                          required={idx === 0}
-                          className="bg-[#e6ecf3] flex-1"
-                        />
-                        {idx != formik.values.inventors.length - 1 && inv.trim() !== "" && (
-                          <button
-                            type="button"
-                            onClick={() => remove(idx)}
-                            className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
-                            title="Remove inventor"
-                            aria-label="Remove inventor"
-                          >
-                            <Minus size={18} />
-                          </button>
-                        )}
-                        {idx === formik.values.inventors.length - 1 && inv.trim() !== "" && (
-                          <button
-                            type="button"
-                            onClick={() => push("")}
-                            className="flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-blue-200 text-[#073567] hover:bg-blue-100 hover:text-blue-900 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                            title="Add inventor"
-                            aria-label="Add inventor"
-                          >
-                            <Plus size={18} />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    {formik.touched.inventors && typeof formik.errors.inventors === "string" && (
-                      <div className="text-red-600 text-sm">{formik.errors.inventors}</div>
+                    {/* Render added inventors on top */}
+                    {formik.values.inventors.length > 0 && (
+                      <ul className="mb-2">
+                        {formik.values.inventors.map((uuid, idx) => {
+                          const inventor = selectedInventors.find((u) => u.id === uuid);
+                          if (!inventor) return null;
+                          return (
+                            <li key={uuid} className="flex items-center gap-2 p-2 bg-white border rounded shadow mb-1">
+                              <Avatar className="w-8 h-8">
+                                <AvatarImage src={inventor.image} alt={inventor.preferred_name} />
+                                <AvatarFallback>{inventor.preferred_name?.[0] || '?'}</AvatarFallback>
+                              </Avatar>
+                              <span>{inventor.preferred_name}</span>
+                              {inventor.email && <span className="text-gray-500 text-xs ml-2">({inventor.email})</span>}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  remove(idx);
+                                  handleRemoveInventor(idx);
+                                }}
+                                className="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-white border border-red-200 text-red-600 hover:bg-red-100 hover:text-red-800 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-red-300"
+                                title="Remove inventor"
+                                aria-label="Remove inventor"
+                              >
+                                <Minus size={18} />
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     )}
-                    {Array.isArray(formik.errors.inventors) && formik.errors.inventors.map((err, idx) =>
-                      err ? <div key={idx} className="text-red-600 text-sm">{err}</div> : null
-                    )}
+                    {/* Search input at the bottom */}
+                    <div className="mb-2 relative">
+                      <Input
+                        value={inventorSearch}
+                        onChange={e => {
+                          setInventorSearch(e.target.value);
+                          if (e.target.value.length > 1) {
+                            fetchInventorSuggestions(e.target.value, 1);
+                          } else {
+                            setInventorSuggestions([]);
+                            setInventorHasMore(false);
+                          }
+                        }}
+                        placeholder="Search inventor by name"
+                        className="bg-[#e6ecf3] flex-1"
+                      />
+                      {inventorLoading && <div>Loading...</div>}
+                      {(inventorSuggestions.length > 0 || inventorHasMore) && (
+                        <ul className="bg-white border rounded shadow mt-1 max-h-60 overflow-y-auto absolute z-10 w-full">
+                          {inventorSuggestions.map((user, idx) => (
+                            <li
+                              key={user.id}
+                              className="flex items-center gap-2 p-2 hover:bg-blue-100 cursor-pointer"
+                              onClick={() => handleAddInventor(user, push)}
+                            >
+                              <Avatar className="w-8 h-8">
+                                <AvatarImage src={user.image} alt={user.preferred_name} />
+                                <AvatarFallback>{user.preferred_name?.[0] || '?'}</AvatarFallback>
+                              </Avatar>
+                              <span>{user.preferred_name}</span>
+                              {user.email && <span className="text-gray-500 text-xs ml-2">({user.email})</span>}
+                            </li>
+                          ))}
+                          {inventorHasMore && (
+                            <li
+                              className="p-2 text-center text-blue-600 cursor-pointer hover:bg-blue-50"
+                              onClick={() => fetchInventorSuggestions(inventorSearch, inventorPage + 1)}
+                            >
+                              Load more...
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
                   </div>
                 )}
               </FieldArray>
