@@ -60,6 +60,13 @@ function DataTable({ data = [], colums, isLoading = false, onRowClick }: DataTab
   // Skeleton rows for loading
   const skeletonRows = Array.from({ length: 8 });
 
+  if (data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-[#073567] text-lg font-semibold bg-[#b7c7d8]">
+        No data found.
+      </div>
+    );
+  }
   return (
     <Table>
       <TableHeader>

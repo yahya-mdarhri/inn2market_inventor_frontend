@@ -153,7 +153,7 @@ const Settings = () => {
             <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[#073567]/10">
               <div className="relative group">
                 <Avatar className="h-28 w-28 border-2 rounded-2xl border-[#D1D600]">
-                  <AvatarImage src={formik.values.image ? URL.createObjectURL(formik.values.image) : inventor?.image || "https://github.com/shadcn.png"} />
+                  <AvatarImage src={formik.values.image ? URL.createObjectURL(formik.values.image) : inventor?.image } />
                   <AvatarFallback className="rounded text-xl">{(inventor?.preferred_name || 'CN').slice(0,2).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <button
@@ -369,14 +369,16 @@ const Settings = () => {
                   <div className="text-red-600 text-sm">{passwordFormik.errors.confirm_password}</div>
                 )}
               </div>
-              <LoadingButton type="submit" className="bg-[#073567] text-white font-bold rounded-lg px-4 py-2 mt-2 w-fit hover:bg-[#05294a]" loading={loading} loadingText="Updating..." disabled={loading}>
-                Update Password
-              </LoadingButton>
+              <div className="flex justify-end">
+                <LoadingButton type="submit" className="bg-[#073567] text-white font-bold rounded-lg px-4 py-2 mt-2 w-fit hover:bg-[#05294a]" loading={loading} loadingText="Updating..." disabled={loading}>
+                  Save Password
+                </LoadingButton>
+              </div>
               {success && <div className="text-green-600 text-sm text-right">Password changed successfully!</div>}
               {error && <div className="text-red-600 text-sm text-right">{error}</div>}
             </form>
             {/* End Password Change Form */}
-            <div className="pt-6 mt-4">
+            {/* <div className="pt-6 mt-4">
               <label className="text-[#073567] font-semibold mb-2 block">Language</label>
               <div className="relative w-full">
                 <button
@@ -415,16 +417,16 @@ const Settings = () => {
                   </ul>
                 )}
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
         {/* Save All Changes Button */}
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <LoadingButton className="bg-[#073567] text-white font-bold rounded-lg px-6 py-3 text-lg hover:bg-[#05294a]" loading={loading} loadingText="Saving..." disabled={loading}>
             Save All Changes
           </LoadingButton>
-        </div>
+        </div> */}
       </div>
     </>
   );

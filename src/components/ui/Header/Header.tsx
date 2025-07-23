@@ -9,6 +9,7 @@ import axios from 'axios';
 import type { Notification } from '@/types/notifecation';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '@/context/UserContext';
 
 
 async function fetchNotifications(page = 1, pageSize = 3): Promise<{ count: number, results: Notification[] }> {
@@ -39,7 +40,7 @@ function Header() {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(3); // or make this adjustable
   const [totalCount, setTotalCount] = useState(0);
-
+  const { user } = useAuth();
   const handleNotificationsClick = () => {
     setShowDropdown(!showDropdown);
     if (!showDropdown) {
@@ -180,9 +181,9 @@ function Header() {
             </div>
           )}
         </div>
-        <Avatar className='header-avatar box'>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+        <Avatar className='header-avatar box' onClick={() => navigator('/profile')}>
+          <AvatarImage src={user?.inventor?.image} />
+          <AvatarFallback>{(user?.inventor?.preferred_name || 'CN').slice(0,2).toUpperCase()}</AvatarFallback>
         </Avatar>
       </div>
     </header>

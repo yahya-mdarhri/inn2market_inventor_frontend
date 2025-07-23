@@ -76,9 +76,8 @@ const Profile = () => {
       <Card className="flex-1 flex flex-col sm:flex-row items-center bg-[#073567] rounded-2xl p-4 sm:p-6 lg:p-8 min-w-0 w-full max-w-[700px] lg:h-full">
         <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
           <Avatar className="h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32 border-2 rounded-2xl border-[#D1D600]">
-            
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback className='rounded'>CN</AvatarFallback>
+            <AvatarImage src={user?.inventor?.image} />
+            <AvatarFallback className='rounded'>{(user?.inventor?.preferred_name || 'CN').slice(0,2).toUpperCase()}</AvatarFallback>
           </Avatar>
         </div>
         <div className="flex flex-col justify-center text-center sm:text-left text-white flex-1 min-w-0">
