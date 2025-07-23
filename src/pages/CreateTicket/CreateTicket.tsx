@@ -342,7 +342,7 @@ export default function CreateTicket() {
                       {inventorLoading && <div>Loading...</div>}
                       {(inventorSuggestions.length > 0 || inventorHasMore) && (
                         <ul className="bg-white border rounded shadow mt-1 max-h-60 overflow-y-auto absolute z-10 w-full">
-                          {inventorSuggestions.map((user, idx) => (
+                          {inventorSuggestions.map((user, _idx) => (
                             <li
                               key={user.id}
                               className="flex items-center gap-2 p-2 hover:bg-blue-100 cursor-pointer"

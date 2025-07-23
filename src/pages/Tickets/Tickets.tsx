@@ -11,7 +11,7 @@ export function Tickets() {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(100)
+  const [pageSize, _setPageSize] = useState(100)
 
   // Get tickets from API with pagination
   const fetchTickets = (pageNum = page, pageSz = pageSize) => {

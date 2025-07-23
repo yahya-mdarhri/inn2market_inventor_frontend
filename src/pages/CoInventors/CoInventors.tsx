@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '@shadcn/card';
 import { Helmet } from '@dr.pogodin/react-helmet';
 import { Avatar, AvatarImage, AvatarFallback } from '@shadcn/avatar';

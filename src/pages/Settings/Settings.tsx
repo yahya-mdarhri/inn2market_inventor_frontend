@@ -16,11 +16,11 @@ const affiliationOptions = [
   { value: "UIR", label: "UIR" },
 ];
 
-const languages = [
-  { code: 'es', name: 'Español', flag: 'https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/es.svg' },
-  { code: 'en', name: 'English', flag: 'https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/gb.svg' },
-  { code: 'fr', name: 'Français', flag: 'https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/fr.svg' },
-];
+// const languages = [
+//   { code: 'es', name: 'Español', flag: 'https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/es.svg' },
+//   { code: 'en', name: 'English', flag: 'https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/gb.svg' },
+//   { code: 'fr', name: 'Français', flag: 'https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/fr.svg' },
+// ];
 
 const validationSchema = yup.object({
   preferred_name: yup.string().min(1).max(150).required('Full name is required'),
@@ -40,9 +40,9 @@ const passwordSchema = yup.object({
 });
 
 const Settings = () => {
-  const { user, setUser, refreshUser } = useAuth();
-  const [selectedLang, setSelectedLang] = useState('en');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { user, refreshUser } = useAuth();
+  // const [_selectedLang, _setSelectedLang] = useState('en');
+  const [_dropdownOpen, setDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +68,7 @@ const Settings = () => {
       setSuccess(false);
       setError(null);
       try {
-        let payload;
+        let payload: any;
         let config = {};
         if (values.image) {
           payload = new FormData();

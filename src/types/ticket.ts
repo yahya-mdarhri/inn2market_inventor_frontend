@@ -15,7 +15,7 @@ export type Ticket = {
 }
 
 // Ticket status enum
-export enum TicketStatus {
+export const enum TicketStatus {
   PENDING = "pending",
   APPROVED = "approved",
   REFUSED = "refused"

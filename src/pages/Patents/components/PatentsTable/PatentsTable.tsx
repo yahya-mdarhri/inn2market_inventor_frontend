@@ -9,7 +9,7 @@ import * as XLSX from "xlsx"
 import { ResizableBox } from "react-resizable"
 import "react-resizable/css/styles.css"
 import type { Patent } from "@/types/patent"
-import { TicketStatus, TICKET_STATUS_COLORS } from "@/types"
+import { TicketStatus, TICKET_STATUS_COLORS, type Inventor } from "@/types"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useNavigate } from "react-router-dom"
 
@@ -75,7 +75,7 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
   // Filter patents by title or inventor name
   const filteredPatents = sortedPatents.filter(patent =>
     patent.title.toLowerCase().includes(search.toLowerCase()) ||
-    patent.inventors.some(inv => inv.toLowerCase().includes(search.toLowerCase()))
+    patent.inventors.some((inv: Inventor) => inv.preferred_name.toLowerCase().includes(search.toLowerCase()))
   )
 
   // Handle select all
@@ -407,9 +407,7 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
                           >
                             {patent.status.charAt(0).toUpperCase() + patent.status.slice(1)}
                           </span>
-                        ) : Array.isArray(patent[col.key as keyof Patent])
-                          ? (patent[col.key as keyof Patent] as string[]).join(", ")
-                          : patent[col.key as keyof Patent]}
+                        ) : Array.isArray(patent[col.key as keyof Patent])}
                       </TableCell>
                     ))
                     }

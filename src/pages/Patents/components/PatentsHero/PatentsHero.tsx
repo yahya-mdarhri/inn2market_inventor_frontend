@@ -1,22 +1,19 @@
 import "./PatentsHero.css"
 import { Button } from "@/components/shadcn/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/card"
-import { FileText as PatentIcon, Clock, CheckCircle, Plus, XCircle } from "lucide-react"
-import type { Patent } from "@/types/patent"
-import { Skeleton } from "@/components/shadcn/skeleton"
+import { Card, CardHeader, CardTitle } from "@/components/shadcn/card"
+import { FileText as PatentIcon, Plus } from "lucide-react"
 import { Link } from "react-router-dom"
 
 interface PatentsHeroProps {
-  patents: Patent[],
-  isLoading?: boolean
+  // patents: Patent[],
 }
 
-export function PatentsHero({ patents, isLoading }: PatentsHeroProps) {
+export function PatentsHero({  }: PatentsHeroProps) {
   // Stats calculation
-  const total = patents.length
-  const pending = patents.filter(t => t.status === "pending").length
-  const approved = patents.filter(t => t.status === "approved").length
-  const refused = patents.filter(t => t.status === "refused").length
+  // const total = patents.length
+  // const pending = patents.filter(t => t.status === "pending").length
+  // const approved = patents.filter(t => t.status === "approved").length
+  // const refused = patents.filter(t => t.status === "refused").length
 
   return (
     <Card className="w-full max-w-7xl mx-auto mb-8 border-0 shadow-xl bg-gradient-to-br from-[#073567] to-[#05294a]">

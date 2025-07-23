@@ -11,7 +11,7 @@ export function Patents() {
   const [patents, setPatents] = useState<Patent[]>([])
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(100)
+  const [pageSize, _setPageSize] = useState(100)
 
   // Get patents from API with pagination
   const fetchPatents = (pageNum = page, pageSz = pageSize) => {
@@ -45,7 +45,7 @@ export function Patents() {
         <meta property="og:description" content="View and manage all your submitted patents. Track status and details of your inventions." />
       </Helmet>
       <div className="w-full max-w-[78rem] flex flex-col">
-        <PatentsHero patents={patents} isLoading={isLoading}/>
+        <PatentsHero />
         <PatentsTable 
           patents={patents} 
           isLoading={isLoading}

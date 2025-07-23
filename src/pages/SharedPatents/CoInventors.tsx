@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent } from '@shadcn/card';
 import { Button } from '@shadcn/button';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@shadcn/table';

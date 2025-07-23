@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import MainLayout from '@layouts/MainLayout/MainLayout';
 import { useAuth } from '@context/UserContext';
-import { Progress } from '@shadcn/progress';
+// import { Progress } from '@shadcn/progress';
 import { Lightbulb } from 'lucide-react';
 import './protectedlayout.css';
 

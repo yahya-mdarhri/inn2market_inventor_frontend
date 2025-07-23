@@ -1,14 +1,11 @@
 import { Card, CardContent } from '@shadcn/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@shadcn/avatar';
-// import { Separator } from '@shadcn/separator';
-import { FileText, Users, Clock, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { FileText, Users  } from 'lucide-react';
 import { Button } from '@shadcn/button';
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@shadcn/table';
 import './Profile.css';
 import { useAuth } from '@context/UserContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { TICKET_STATUS_COLORS, TicketStatus, type Ticket } from '@/types';
 import { Helmet } from '@dr.pogodin/react-helmet';
 import DataTable from '@ui/DataTable/DataTable';
 import { type Patent } from '@/types/patent'; 
@@ -24,19 +21,19 @@ const columns = [
 const Profile = () => {
   const { user } = useAuth();
   const [patents, setPatents] = useState<Patent[]>([]);
-  const [isLoading, setIsLoading] = useState<Boolean>(true);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [_isLoading, setIsLoading] = useState<Boolean>(true);
+  const [page, _setPage] = useState(1);
+  const [pageSize, _setPageSize] = useState(10);
   const [coInventors, setCoInventors] = useState<Inventor[]>([]);
   const [isLoadingCoInventors, setIsLoadingCoInventors] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get<Patent[]>('/api/inventors/patents', {
+    axios.get<{results:Patent[]}>('/api/inventors/patents', {
       params: { page, page_size: pageSize }
     })
       .then(response => {
-        const data:Patent[] = response.data?.results || [];
+        const data = response.data?.results || [];
         setPatents(data);
         setIsLoading(false)
       })
@@ -149,7 +146,7 @@ const Profile = () => {
         ) : coInventors.length === 0 ? (
           <div>No co-inventors found.</div>
         ) : (
-          coInventors.map((inventor, idx) => (
+          coInventors.map((inventor, _idx) => (
             <Card key={inventor.id} className="bg-[var(--primary)] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 flex-1 min-w-[32%] max-w-full sm:max-w-[48%] lg:max-w-[31%] xl:max-w-[23%]">
               <CardContent className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 lg:p-6">
                 <Avatar className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 border-2 border-[#D1D600] rounded-xl flex-shrink-0">

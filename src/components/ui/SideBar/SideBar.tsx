@@ -11,8 +11,6 @@ import {
   SidebarFooter,
 } from '@shadcn/sidebar';
 import { useLocation, Link } from 'react-router-dom';
-import FullLogo from '@/assets/logos/full_logo.svg';
-import SmallLogo from '@/assets/logos/small_logo.svg';
 import { useAuth } from '@context/UserContext';
 
 const mainItems = [

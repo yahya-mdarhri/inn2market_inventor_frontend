@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { TICKET_STATUS_COLORS, type Ticket } from "@/types";
 import axios from "axios";
-import { FileText, Users, Calendar, Info, FileImage, BadgeCheck, Clock, CheckCircle, XCircle, Pencil, Trash2, Trash } from "lucide-react";
+import { FileText, Users, Calendar, Info, FileImage, BadgeCheck, Clock, CheckCircle, XCircle, Pencil,  Trash } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { Helmet } from '@dr.pogodin/react-helmet';

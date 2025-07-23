@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import type { Patent } from "@/types/patent";
 import axios from "axios";
-import { FileText, Users, Calendar, Info, FileImage, BadgeCheck, Pencil, Trash } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
+import { FileText, Users, Calendar, Info, FileImage, BadgeCheck,   } from "lucide-react";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { Helmet } from '@dr.pogodin/react-helmet';
 import type { Inventor } from "@/types/user";
 
 export default function PatentDetails() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [patent, setPatent] = useState<Patent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [deleting, setDeleting] = useState(false);
+  // const [_deleting, setDeleting] = useState(false);
   const [inventorDetails, setInventorDetails] = useState<Record<string, Inventor | null>>({});
   const [inventorsLoading, setInventorsLoading] = useState(false);
 
@@ -50,19 +49,19 @@ export default function PatentDetails() {
       });
   }, [patent]);
 
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this patent? This action cannot be undone.")) {
-      return;
-    }
-    setDeleting(true);
-    try {
-      await axios.delete(`/api/inventors/patent/${id}/`);
-      navigate("/patents");
-    } catch (err) {
-      setDeleting(false);
-      alert("Failed to delete patent.");
-    }
-  };
+  // const handleDelete = async () => {
+  //   if (!window.confirm("Are you sure you want to delete this patent? This action cannot be undone.")) {
+  //     return;
+  //   }
+  //   setDeleting(true);
+  //   try {
+  //     await axios.delete(`/api/inventors/patent/${id}/`);
+  //     navigate("/patents");
+  //   } catch (err) {
+  //     setDeleting(false);
+  //     alert("Failed to delete patent.");
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -103,7 +102,7 @@ export default function PatentDetails() {
               </div>
             </div>
             <div className="space-y-6">
-              {["Abstract", "Affiliation", "TRL Level", "CRL Level", "Contract Type", "Sector", "Nature", "Deposit Document", "Research Report Document", "Delivery Document", "Inventors", "Shemas"].map((label, idx) => (
+              {["Abstract", "Affiliation", "TRL Level", "CRL Level", "Contract Type", "Sector", "Nature", "Deposit Document", "Research Report Document", "Delivery Document", "Inventors", "Shemas"].map((label, _idx) => (
                 <div key={label} className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex items-center gap-2 mb-1">
                     <Skeleton className="w-5 h-5 rounded-full bg-[#a3b8d8]" />
@@ -272,7 +271,7 @@ export default function PatentDetails() {
                     const inv = inventorDetails[invId as unknown as string];
                     return (
                       <span key={idx} className="inline-block bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm font-semibold">
-                        {inv?.preferred_name || inv?.email || invId}
+                        {inv?.preferred_name}
                       </span>
                     );
                   })

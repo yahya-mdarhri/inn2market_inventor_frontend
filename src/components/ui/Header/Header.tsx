@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SidebarTrigger } from '@shadcn/sidebar'
 import { Button } from "@shadcn/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@shadcn/avatar";

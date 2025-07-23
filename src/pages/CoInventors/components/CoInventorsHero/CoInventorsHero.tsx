@@ -15,8 +15,8 @@ export function CoInventorsHero({ total, affiliations }: CoInventorsHeroProps) {
         .map((a) => a.trim())
     )
   );
-  const shownAffiliations = uniqueAffiliations.slice(0, 3);
-  const moreCount = uniqueAffiliations.length - shownAffiliations.length;
+  // const shownAffiliations = uniqueAffiliations.slice(0, 3);
+  // const moreCount = uniqueAffiliations.length - shownAffiliations.length;
 
   return (
     <Card className="w-full max-w-7xl mx-auto mb-8 border-0 shadow-xl bg-gradient-to-br from-[#073567] to-[#05294a]">

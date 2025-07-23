@@ -237,7 +237,7 @@ const Dashboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {[0,1.2,3,4,5].map((ticket, idx) => (
+                  {[0,1,2,3,4,5].map((_ticket, idx) => (
                     <TableRow 
                       key={idx} 
                       className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
@@ -252,7 +252,7 @@ const Dashboard = () => {
                       <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
                         <div className="flex items-center">
                           <div className="flex -space-x-2 sm:-space-x-3">
-                            {[0,1,2,3].map((inv, i) => (
+                            {[0,1,2,3].map((_inv, i) => (
                               <Skeleton key={i} className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-[var(--primary)] rounded-lg" />
                             ))}
                           </div>
