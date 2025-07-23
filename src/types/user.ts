@@ -12,6 +12,9 @@ export type Inventor = {
   image?: string;
   phone?: string;
   orcid?: string;
+  patents_count: number;
+  tickets_count: number;
+  co_inventors_count: number;
   affiliation: string;
   name_variant: string[];
   preferred_name: string;

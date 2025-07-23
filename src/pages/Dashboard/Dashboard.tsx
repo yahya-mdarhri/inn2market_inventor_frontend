@@ -43,11 +43,6 @@ const activityTypeIcon: Record<string, React.ElementType> = {
   default: MdEdit,
 };
 
-const stats = [
-  { label: 'Patents', value: 12, icon: FileText },
-  { label: 'Tickets', value: 34, icon: Ticket },
-  { label: 'Co-Inventors', value: 5, icon: Users },
-];
 
 const Dashboard = () => {
 
@@ -57,6 +52,12 @@ const Dashboard = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loadingActivities, setLoadingActivities] = useState(true);
 
+
+  const stats = [
+    { label: 'Patents', value: user?.inventor?.patents_count || 0, icon: FileText },
+    { label: 'Tickets', value: user?.inventor?.tickets_count || 0, icon: Ticket },
+    { label: 'Co-Inventors', value: user?.inventor?.co_inventors_count || 0, icon: Users },
+  ];
   useEffect(() => {
     async function fetchTicketsAndInventors() {
       setLoading(true);
