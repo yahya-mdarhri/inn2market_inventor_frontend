@@ -124,9 +124,7 @@ const Dashboard = () => {
             Welcome back, <span className="text-[#D1D600]">{user?.inventor?.preferred_name}</span>
           </h2>
           <p className="text-white text-sm sm:text-base lg:text-lg font-semibold mb-1">
-            Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit.
-            Maecenas vehicula.
+          Manage your inventions, track patent progress, and connect with fellow innovators — all in one place.
           </p>
           <Button className="bg-[#D1D600] text-[#073567] font-bold text-xs sm:text-sm lg:text-base px-2 sm:px-3 lg:px-6 py-1.5 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 shadow-none hover:bg-[#bdbd00] w-full sm:w-auto justify-center">
             <Link to="/tickets/create" className="flex items-center gap-1 sm:gap-2 text-[#073567] no-underline">Submit Your Patent <MdAdd size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" /></Link>
