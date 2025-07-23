@@ -7,7 +7,7 @@ import LoadingButton from '@/components/ui/LoadinButton/LoadingButton';
 const Auth: React.FC = () => {
 
   const { login, user } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, _setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -57,13 +57,13 @@ const Auth: React.FC = () => {
     setSubmitting(false);
   };
 
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setError('');
-  };
+  // const toggleForm = () => {
+  //   setIsLogin(!isLogin);
+  //   setEmail('');
+  //   setPassword('');
+  //   setConfirmPassword('');
+  //   setError('');
+  // };
 
   return (
     <>
