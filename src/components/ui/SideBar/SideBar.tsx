@@ -35,18 +35,7 @@ function SideBar() {
   const isActive = (url: string) => location.pathname === url;
 
   return (
-    <Sidebar className="sidebar-container"  collapsible="icon">
-      {/* <SidebarHeader>
-        <Link to="/dashboard" className="flex items-center gap-3">
-
-          <img
-            src={SmallLogo}
-            alt="Logo"
-            className="w-8 h-8"
-          />
-          <span className='group-data-[collapsible=icon]:hidden'>Inventor Platform</span>
-        </Link>
-      </SidebarHeader> */}
+    <Sidebar className="sidebar-container "  collapsible="icon">
 
       <SidebarContent>
         <SidebarGroup>

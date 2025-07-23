@@ -6,7 +6,7 @@ import "./MainLayout.css";
 
 function MainLayout({ children }: { children?: React.ReactNode }) {
     return (
-        <SidebarProvider className='bg-[var(--bg-color)]'>
+        <SidebarProvider defaultOpen={false} className='bg-[var(--bg-color)]'>
           <Sidebar />
           <main className='main-container'>
             <Header />
