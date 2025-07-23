@@ -133,12 +133,9 @@ const Auth: React.FC = () => {
           </form>
           <p className="text-sm text-gray-300 mt-4 text-center">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-            <button
-              onClick={toggleForm}
-              className="text-indigo-300 hover:text-indigo-200 font-medium"
-            >
+            <a href='https://forms.office.com/Pages/ResponsePage.aspx?id=hirXO-qopkSomfPMy-3wJ7DyQY263ttEtDBgnhjOXoNUNlI0UFVTV1BWTDNTQTlFN0dWMVEyNUlBTS4u' className="text-indigo-300 hover:text-indigo-200 font-medium">
               {isLogin ? 'Sign Up' : 'Login'}
-            </button>
+            </a>
           </p>
         </div>
       </div>
