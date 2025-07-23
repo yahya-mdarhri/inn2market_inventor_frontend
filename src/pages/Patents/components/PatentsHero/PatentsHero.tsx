@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/ca
 import { FileText as PatentIcon, Clock, CheckCircle, Plus, XCircle } from "lucide-react"
 import type { Patent } from "@/types/patent"
 import { Skeleton } from "@/components/shadcn/skeleton"
+import { Link } from "react-router-dom"
 
 interface PatentsHeroProps {
   patents: Patent[],
@@ -30,8 +31,7 @@ export function PatentsHero({ patents, isLoading }: PatentsHeroProps) {
           </div>
           <div className="flex-shrink-0 flex items-center gap-2">
             <Button size="lg" className="bg-white text-[#073567] font-bold rounded-lg px-6 py-3 shadow-lg hover:bg-blue-100 flex items-center gap-2 text-lg transition-all duration-200">
-              <Plus className="w-6 h-6" />
-              Create Patent
+              <Link to="/tickets/create" className="flex items-center gap-2 text-[#073567] no-underline"><Plus className="w-6 h-6" />Create Patent</Link>
             </Button>
           </div>
         </div>

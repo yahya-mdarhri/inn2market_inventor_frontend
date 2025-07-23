@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { formatDistanceToNow } from "date-fns";
+import { Link } from "react-router-dom"
 
 type Inventor = {
   name: string;
@@ -128,7 +129,7 @@ const Dashboard = () => {
             Maecenas vehicula.
           </p>
           <Button className="bg-[#D1D600] text-[#073567] font-bold text-xs sm:text-sm lg:text-base px-2 sm:px-3 lg:px-6 py-1.5 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 shadow-none hover:bg-[#bdbd00] w-full sm:w-auto justify-center">
-            Submit Your Patent <MdAdd size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+            <Link to="/tickets/create" className="flex items-center gap-1 sm:gap-2 text-[#073567] no-underline">Submit Your Patent <MdAdd size={14} className="sm:w-4 sm:h-4 lg:w-5 lg:h-5" /></Link>
           </Button>
         </CardContent>
         <div className="flex-1 flex justify-center sm:justify-end mt-0 sm:w-2/3">
@@ -220,100 +221,105 @@ const Dashboard = () => {
           <p className="text-[#073567] text-sm sm:text-base opacity-80 mt-1">Your recent patent ticket submissions</p>
         </div>
         <Button className="bg-[#073567] text-white font-bold rounded-lg px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg shadow-none hover:bg-[#05294a]">
-          View all {'>'}
+          <Link to="/tickets" className="text-white no-underline">View all {'>'}</Link>
         </Button>
       </div>
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
         <div className="mt-4 border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto">
             {loading ? (
-              
-                          <Table>
-              <TableHeader>
-                <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {[0,1.2,3,4,5].map((ticket, idx) => (
-                  <TableRow 
-                    key={idx} 
-                    className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
-                      idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
-                    }`}
-                  >
-                    <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
-                      <div className="truncate max-w-[150px] sm:max-w-[200px] lg:max-w-none">
-                        <Skeleton className="w-full h-6 sm:h-8 bg-[var(--primary)] rounded-lg" />
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                      <div className="flex items-center">
-                        <div className="flex -space-x-2 sm:-space-x-3">
-                          {[0,1,2,3].map((inv, i) => (
-                            <Skeleton key={i} className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-[var(--primary)] rounded-lg" />
-                          ))}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                      <Skeleton className="w-24 h-6 sm:h-8 bg-[var(--primary)] rounded inline-flex items-center justify-center text-xs sm:text-sm font-medium" />
-                    </TableCell>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
+                    <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
+                    <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
+                    <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {[0,1.2,3,4,5].map((ticket, idx) => (
+                    <TableRow 
+                      key={idx} 
+                      className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
+                        idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
+                      }`}
+                    >
+                      <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
+                        <div className="truncate max-w-[150px] sm:max-w-[200px] lg:max-w-none">
+                          <Skeleton className="w-full h-6 sm:h-8 bg-[var(--primary)] rounded-lg" />
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                        <div className="flex items-center">
+                          <div className="flex -space-x-2 sm:-space-x-3">
+                            {[0,1,2,3].map((inv, i) => (
+                              <Skeleton key={i} className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-[var(--primary)] rounded-lg" />
+                            ))}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                        <Skeleton className="w-24 h-6 sm:h-8 bg-[var(--primary)] rounded inline-flex items-center justify-center text-xs sm:text-sm font-medium" />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             ) : (
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
-                  <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tickets.map((ticket, idx) => (
-                  <TableRow 
-                    key={ticket.id || idx} 
-                    className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
-                      idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
-                    }`}
-                  >
-                    <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
-                      <div className="truncate max-w-[150px] sm:max-w-[200px] lg:max-w-none">{ticket.title}</div>
-                    </TableCell>
-                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                      <div className="flex items-center">
-                        <div className="flex -space-x-2 sm:-space-x-3">
-                          {ticket.inventors.slice(0, 4).map((inv, i) => (
-                            <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  i + 1 }}>
-                              <AvatarImage src={inv.img} alt={inv.name} />
-                              <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.name[0]}</AvatarFallback>
-                            </Avatar>
-                          ))}
-                          {ticket.inventors.length > 4 && (
-                            <Avatar className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  ticket.inventors.length }}>
-                              <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
-                                +{ticket.inventors.length - 4}
-                              </AvatarFallback>
-                            </Avatar>
-                          )}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
-                      <span className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-amber-100 text-amber-800 border border-amber-200">
-                        <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                        {ticket.status}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+              tickets.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-[#073567] text-lg font-semibold bg-[#b7c7d8]">
+                  No tickets found.
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-[#073567] hover:bg-[#05294a] border-none">
+                      <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Title</TableHead>
+                      <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Inventors</TableHead>
+                      <TableHead className="text-white text-base sm:text-lg font-bold py-3 sm:py-4 px-3 sm:px-6 text-left">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {tickets.map((ticket, idx) => (
+                      <TableRow 
+                        key={ticket.id || idx} 
+                        className={`bg-[#b7c7d8] hover:bg-[#a0b3c8] transition-colors duration-200 ${
+                          idx === tickets.length - 1 ? '' : 'border-b border-[var(--primary)]'
+                        }`}
+                      >
+                        <TableCell className="text-[#073567] font-semibold py-3 sm:py-4 px-3 sm:px-6 text-sm sm:text-base">
+                          <div className="truncate max-w-[150px] sm:max-w-[200px] lg:max-w-none">{ticket.title}</div>
+                        </TableCell>
+                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                          <div className="flex items-center">
+                            <div className="flex -space-x-2 sm:-space-x-3">
+                              {ticket.inventors.slice(0, 4).map((inv, i) => (
+                                <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  i + 1 }}>
+                                  <AvatarImage src={inv.img} alt={inv.name} />
+                                  <AvatarFallback className='rounded text-xs sm:text-sm'>{inv.name[0]}</AvatarFallback>
+                                </Avatar>
+                              ))}
+                              {ticket.inventors.length > 4 && (
+                                <Avatar className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  ticket.inventors.length }}>
+                                  <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
+                                    +{ticket.inventors.length - 4}
+                                  </AvatarFallback>
+                                </Avatar>
+                              )}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="py-3 sm:py-4 px-3 sm:px-6">
+                          <span className="inline-flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-amber-100 text-amber-800 border border-amber-200">
+                            <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                            {ticket.status}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )
             )}
           </div>
         </div>

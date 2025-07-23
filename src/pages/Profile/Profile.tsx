@@ -13,6 +13,7 @@ import { Helmet } from '@dr.pogodin/react-helmet';
 import DataTable from '@ui/DataTable/DataTable';
 import { type Patent } from '@/types/patent'; 
 import { type Inventor } from '@/types/user';
+import { Link } from "react-router-dom"
 
 const columns = [
   { key: 'title', label: 'Title' },
@@ -116,7 +117,7 @@ const Profile = () => {
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         <h3 className="text-lg sm:text-xl font-bold text-[#073567]">Patents</h3>
         <Button className="bg-[#073567] text-white font-bold rounded-lg px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg shadow-none hover:bg-[#05294a]">
-          View all {'>'}
+          <Link to="/patents" className="text-white no-underline">View all {'>'}</Link>
         </Button>
       </div>
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
@@ -140,7 +141,7 @@ const Profile = () => {
           <p className="text-[#073567] text-sm sm:text-base opacity-80 mt-1">Collaborators who contributed to your patents</p>
         </div>
         <Button className="bg-[#073567] text-white font-bold rounded-lg px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg shadow-none hover:bg-[#05294a]">
-          View all {'>'}
+          <Link to="/coinventors" className="text-white no-underline">View all {'>'}</Link>
         </Button>
       </div>
       <div className="flex flex-wrap gap-3 sm:gap-4 p-4 sm:p-6 lg:p-8">

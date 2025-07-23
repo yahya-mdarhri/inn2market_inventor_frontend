@@ -225,6 +225,11 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
         {/* Table section */}
         <div className="border border-[var(--primary)] rounded-xl overflow-hidden">
           <div className="overflow-x-auto w-full custom-scrollbar">
+            {(!isLoading && filteredPatents.length === 0) ? (
+              <div className="flex flex-col items-center justify-center py-16 text-[#073567] text-lg font-semibold bg-[#b7c7d8]">
+                No patents found.
+              </div>
+            ) : (
             <Table>
               {/* Table coluumns header */}
               <TableHeader>
@@ -413,6 +418,7 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
                 }
               </TableBody>
             </Table>
+            )}
           </div>
         </div>
       </CardContent>
