@@ -2,14 +2,20 @@
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" },
-    
+    { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@types/*": ["./src/types/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@context/*": ["./src/context/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@ui/*": ["./src/components/ui/*"],
+      "@components/*": ["./src/components/*"],
+      "@shadcn/*": ["./src/components/shadcn/*"],
     }
   }
-  
 }

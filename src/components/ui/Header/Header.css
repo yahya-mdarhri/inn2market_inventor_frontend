@@ -1,0 +1,23 @@
+.header-container {
+  @apply flex w-full justify-between py-3  px-4 sm:px-6 lg:px-8 flex-row;
+}
+
+.left-actions{
+  @apply flex flex-row gap-2;
+}
+
+.header-container *.box {
+  @apply h-9 w-9;
+}
+
+/* .side-trigger {
+  @apply h-9 w-9 bg-[var(--primary)] text-white;
+} */
+
+.header-button {
+  @apply  bg-[var(--primary)] hover:bg-[var(--secondary)] text-white px-3;
+}
+
+.header-avatar {
+  @apply rounded  border-2 border-[var(--primary)];
+}

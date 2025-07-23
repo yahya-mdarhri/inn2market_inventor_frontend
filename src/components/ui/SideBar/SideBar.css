@@ -1,0 +1,3 @@
+.sidebar-container {
+  @apply bg-[var(--primary)] text-[var(--white)];
+}

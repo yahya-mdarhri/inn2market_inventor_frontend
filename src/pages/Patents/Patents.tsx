@@ -1,44 +1,62 @@
-export default function PatentsPage() {
+import { useEffect, useState } from "react"
+import "./Patents.css"
+import { PatentsHero } from "./components/PatentsHero/PatentsHero"
+import { PatentsTable } from "./components/PatentsTable/PatentsTable"
+import type { Patent } from "@/types/patent"
+import axios from "axios"
+import { Helmet } from '@dr.pogodin/react-helmet'
+
+export function Patents() {
+  const [isLoading, setIsLoading] = useState(true)
+  const [patents, setPatents] = useState<Patent[]>([])
+  const [count, setCount] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pageSize, _setPageSize] = useState(100)
+
+  // Get patents from API with pagination
+  const fetchPatents = (pageNum = page, pageSz = pageSize) => {
+    setIsLoading(true)
+    axios.get(`/api/inventors/patents/?page=${pageNum}&page_size=${pageSz}`)
+      .then(response => {
+        setPatents(response.data.results)
+        setCount(response.data.count)
+        setIsLoading(false)
+      })
+      .catch(error => {
+        console.error("Error fetching patents:", error)
+        setIsLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    fetchPatents(page, pageSize)
+  }, [page, pageSize])
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
+
   return (
-    <div className="page  fixed">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-100">Patents</h1>
-        <p className="text-gray-100">Track your patent applications and intellectual property</p>
+    <>
+      <Helmet>
+        <title>Patents | Inventor Portal</title>
+        <meta property="og:title" content="Patents | Inventor Portal" />
+        <meta name="description" content="View and manage all your submitted patents. Track status and details of your inventions." />
+        <meta property="og:description" content="View and manage all your submitted patents. Track status and details of your inventions." />
+      </Helmet>
+      <div className="w-full max-w-[78rem] flex flex-col">
+        <PatentsHero />
+        <PatentsTable 
+          patents={patents} 
+          isLoading={isLoading}
+          count={count}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={handlePageChange}
+        />
       </div>
-
-      <div className="grid gap-6 md:grid-cols-2 max-w-6xl mt-6">
-        <div className="rounded-lg border bg-white p-6 shadow-sm">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900">Patent Portfolio</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Filed</span>
-              <span className="font-medium">8</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Pending</span>
-              <span className="font-medium">3</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Approved</span>
-              <span className="font-medium">5</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-lg border bg-white p-6 shadow-sm max-w-6xl">
-          <h3 className="mb-4 text-lg font-semibold text-gray-900">Recent Applications</h3>
-          <div className="space-y-3">
-            <div className="rounded-lg bg-gray-50 p-3">
-              <p className="font-medium text-gray-900">Smart IoT Sensor System</p>
-              <p className="text-sm text-gray-600">Filed: March 15, 2024</p>
-            </div>
-            <div className="rounded-lg bg-gray-50 p-3">
-              <p className="font-medium text-gray-900">AI-Powered Analytics Platform</p>
-              <p className="text-sm text-gray-600">Filed: February 28, 2024</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
+
+export default Patents

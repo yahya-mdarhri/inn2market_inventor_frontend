@@ -1,0 +1,64 @@
+.coinventors-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.coinventor-card {
+  @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-100;
+}
+
+.coinventor-content {
+  @apply flex items-center gap-4 p-6;
+}
+
+.coinventor-avatar {
+  @apply h-16 w-16 border-2 border-[#D1D600] rounded-xl flex-shrink-0;
+}
+
+.coinventor-fallback {
+  @apply text-lg font-bold text-[#073567] bg-gray-100;
+}
+
+.coinventor-info {
+  @apply flex-1 min-w-0;
+}
+
+.coinventor-name {
+  @apply text-[#073567] font-bold text-lg mb-1 truncate;
+}
+
+.coinventor-role {
+  @apply text-gray-600 text-sm font-medium truncate;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .coinventors-section {
+    @apply w-full px-4;
+  }
+  
+  .coinventors-grid {
+    @apply grid-cols-1 sm:grid-cols-2;
+  }
+}
+
+@media (max-width: 640px) {
+  .coinventors-grid {
+    @apply grid-cols-1;
+  }
+  
+  .coinventor-content {
+    @apply p-4;
+  }
+  
+  .coinventor-avatar {
+    @apply h-12 w-12;
+  }
+  
+  .coinventor-name {
+    @apply text-base;
+  }
+  
+  .coinventor-role {
+    @apply text-xs;
+  }
+}
