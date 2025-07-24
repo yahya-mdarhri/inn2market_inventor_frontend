@@ -13,9 +13,11 @@ import { TicketStatus, TICKET_STATUS_COLORS, type Inventor } from "@/types"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useNavigate } from "react-router-dom"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar"
+import { getPatentHumanValue } from "@/hooks/getPatentHumanValue"
 
 const allColumns = [
   { key: "title", label: "Title" },
+  { key: "inventors", label: "Inventors" },
   { key: "deposit_number", label: "Deposit Number" },
   { key: "deposit_document", label: "Deposit Document" },
   { key: "deposit_date", label: "Deposit Date" },
@@ -33,7 +35,6 @@ const allColumns = [
   { key: "nature", label: "Nature" },
   { key: "schemas", label: "Schemas" },
   { key: "affiliation", label: "Affiliation" },
-  { key: "inventors", label: "Inventors" },
 ];
 
 
@@ -438,7 +439,7 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
                           </div>
                         </div> 
                         :
-                          (patent as any)[col.key]
+                        getPatentHumanValue(col.key, (patent as any)[col.key])
                         )
                         }
                       </TableCell>

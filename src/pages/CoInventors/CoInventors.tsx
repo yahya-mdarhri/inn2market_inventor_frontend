@@ -70,19 +70,21 @@ const CoInventors = () => {
         {/* Pagination controls */}
         <div className="flex justify-center gap-4 mt-10 mb-8">
           <Button
+            className='bg-[var(--primary)] text-white hover:bg-[var(--secondary)]'
             disabled={page === 1}
             onClick={() => setPage(p => Math.max(1, p - 1))}
           >
-            Previous
+            {'<'}
           </Button>
           <span className="self-center">
             Page {page} of {Math.ceil(count / pageSize)}
           </span>
           <Button
+            className='bg-[var(--primary)] text-white hover:bg-[var(--secondary)]'
             disabled={page * pageSize >= count}
             onClick={() => setPage(p => p + 1)}
           >
-            Next
+            {'>'}
           </Button>
         </div>
       </div>

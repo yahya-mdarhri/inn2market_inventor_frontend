@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/shadcn/card";
 import { TICKET_STATUS_COLORS, type Ticket } from "@/types";
 import axios from "axios";
 import { FileText, Users, Calendar, Info, FileImage, BadgeCheck, Clock, CheckCircle, XCircle, Pencil,  Trash } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
+// import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar";
 import { Skeleton } from "@/components/shadcn/skeleton";
 import { Helmet } from '@dr.pogodin/react-helmet';
 import type { Inventor } from "@/types/user";
@@ -357,7 +357,7 @@ export default function TicketDetails() {
         </CardContent>
       </Card>
       {/* Co-Inventors Card */}
-      {ticket.co_applications && ticket.co_applications.length > 0 && (
+      {/* {ticket.co_applications && ticket.co_applications.length > 0 && (
         <Card className="w-full max-w-7xl mx-auto bg-[#b7c7d8] rounded-2xl shadow-lg p-0 mt-6 border border-blue-200">
           <CardHeader className="px-8 pt-6 pb-2">
             <h3 className="text-2xl font-bold text-[#073567] flex items-center gap-2">
@@ -386,7 +386,7 @@ export default function TicketDetails() {
             </div>
           </CardContent>
         </Card>
-      )}
+      )} */}
     </>
   );
 }
