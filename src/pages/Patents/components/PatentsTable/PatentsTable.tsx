@@ -12,6 +12,7 @@ import { type Patent } from "@/types/patent"
 import { TicketStatus, TICKET_STATUS_COLORS, type Inventor } from "@/types"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useNavigate } from "react-router-dom"
+import { Avatar, AvatarImage, AvatarFallback, AvatarFallbackImage } from "@/components/shadcn/avatar"
 
 const allColumns = [
   { key: "title", label: "Title" },
@@ -32,7 +33,7 @@ const allColumns = [
   { key: "nature", label: "Nature" },
   { key: "schemas", label: "Schemas" },
   { key: "affiliation", label: "Affiliation" },
-  // { key: "inventors", label: "Inventors" },
+  { key: "inventors", label: "Inventors" },
 ];
 
 
@@ -418,7 +419,27 @@ export function PatentsTable({ patents , isLoading}: PatentsTableProps) {
                             {patent.status.charAt(0).toUpperCase() + patent.status.slice(1)}
                           </span>
                         ) :
-                         (patent as any)[col.key]
+                        (col.key === "inventors"?
+                          <div className="flex items-center">
+                          <div className="flex -space-x-2 sm:-space-x-3">
+                            {patent.inventors.slice(0, 4).map((inv, i) => (
+                              <Avatar key={i} className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  i + 1 }} onClick={() => navigate(`/inventors/${inv.id}`)}>
+                                <AvatarImage src={inv.image} alt={inv.preferred_name} />
+                                <AvatarFallback className='rounded text-xs sm:text-sm'>{(inv.preferred_name || 'CN').slice(0,2).toUpperCase()}</AvatarFallback>
+                              </Avatar>
+                            ))}
+                            {patent.inventors.length > 4 && (
+                              <Avatar className="border rounded border-[#D1D600] bg-white shadow w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" style={{ zIndex:  patent.inventors.length }}>
+                                <AvatarFallback className='rounded bg-[var(--primary)] text-white text-xs sm:text-sm'>
+                                  +{patent.inventors.length - 4}
+                                </AvatarFallback>
+                              </Avatar>
+                            )}
+                          </div>
+                        </div> 
+                        :
+                          (patent as any)[col.key]
+                        )
                         }
                       </TableCell>
                     ))
