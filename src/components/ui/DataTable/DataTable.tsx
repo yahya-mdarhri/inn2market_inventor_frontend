@@ -1,3 +1,4 @@
+import { getPatentHumanValue } from "@/hooks/getPatentHumanValue";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shadcn/table";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { useState, useMemo } from "react";
@@ -191,7 +192,7 @@ function DataTable({ data = [], colums, isLoading = false, onRowClick }: DataTab
                       ? col.render(item[col.key], item)
                       : Array.isArray(item[col.key])
                         ? (item[col.key] as string[]).join(", ")
-                        : item[col.key]}
+                        :getPatentHumanValue(col.key, item[col.key])}
                   </TableCell>
                 ))}
               </TableRow>
