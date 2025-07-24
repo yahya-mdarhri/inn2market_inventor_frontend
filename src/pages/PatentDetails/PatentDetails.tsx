@@ -267,8 +267,7 @@ export default function PatentDetails() {
                 {inventorsLoading ? (
                   <Skeleton className="h-6 w-32 rounded animate-pulse bg-[#a3b8d8]" />
                 ) : (
-                  patent.inventors.map((invId, idx) => {
-                    const inv = inventorDetails[invId as unknown as string];
+                  patent.inventors.map((inv, idx) => {
                     return (
                       <span key={idx} className="inline-block bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm font-semibold">
                         {inv?.preferred_name}
