@@ -12,7 +12,7 @@ import { type Patent } from "@/types/patent"
 import { TicketStatus, TICKET_STATUS_COLORS, type Inventor } from "@/types"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useNavigate } from "react-router-dom"
-import { Avatar, AvatarImage, AvatarFallback, AvatarFallbackImage } from "@/components/shadcn/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/shadcn/avatar"
 
 const allColumns = [
   { key: "title", label: "Title" },
