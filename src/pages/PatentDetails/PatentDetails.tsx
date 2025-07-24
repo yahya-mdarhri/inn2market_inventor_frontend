@@ -15,7 +15,7 @@ export default function PatentDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // const [_deleting, setDeleting] = useState(false);
-  const [inventorDetails, setInventorDetails] = useState<Record<string, Inventor | null>>({});
+  const [_inventorDetails, setInventorDetails] = useState<Record<string, Inventor | null>>({});
   const [inventorsLoading, setInventorsLoading] = useState(false);
 
   useEffect(() => {
