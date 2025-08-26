@@ -1,4 +1,4 @@
-name = "cie-front"
+name = "cie-frontend"
 workers_dev = true
 assets = {directory = "dist"}
 
