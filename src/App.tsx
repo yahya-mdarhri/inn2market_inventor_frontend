@@ -4,7 +4,7 @@ import axios from 'axios';
 import { UserProvider } from '@context/UserContext';
 
 // axios.defaults.baseURL = "http://localhost:8000/";
-axios.defaults.baseURL = "https://backendciemarketplace-56178e577139.herokuapp.com/";
+axios.defaults.baseURL = "http://192.168.1.171:8000/";
 axios.defaults.withCredentials = true;
 
 function App() {
