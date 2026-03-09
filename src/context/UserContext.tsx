@@ -30,27 +30,44 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const setAuthToken = (token: string | null) => {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      localStorage.setItem('authToken', token);
+    } else {
+      delete axios.defaults.headers.common.Authorization;
+      localStorage.removeItem('authToken');
+    }
+  }
+
   // Get and refresh user data
   const refreshUser = () => {
     axios.get("/api/accounts/me/")
-    .then((res) => {
-      setUser(res.data)
-    })
-    .catch(() => {
-      setUser(null)
-    })
-    .finally (() => { 
-      setLoading(false);
-    })
+      .then((res) => {
+        setUser(res.data)
+      })
+      .catch((err) => {
+        if (err?.response?.status === 401) {
+          setAuthToken(null);
+        }
+        setUser(null)
+      })
+      .finally(() => {
+        setLoading(false);
+      })
   }
 
   // Login function 
   const login = (credentials: LoginCredentials) => {
     return (
       axios.post('api/accounts/login/', credentials)
-      .then(() => {
-        refreshUser();
-      })
+        .then((res) => {
+          const token = res?.data?.access || res?.data?.token || res?.data?.access_token;
+          if (token) {
+            setAuthToken(token);
+          }
+          refreshUser();
+        })
     )
   }
 
@@ -58,13 +75,18 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     return (
       axios.get('/api/accounts/logout/')
-      .then(() => {
-        setUser(null);
-      })
+        .finally(() => {
+          setAuthToken(null);
+          setUser(null);
+        })
     )
   }
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      setAuthToken(storedToken);
+    }
     refreshUser();
   }, [])
 
