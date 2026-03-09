@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import type { User, LoginCredentials } from '@/types';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
@@ -58,28 +58,28 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   // Login function 
-  const login = (credentials: LoginCredentials) => {
-    return (
-      axios.post('api/accounts/login/', credentials)
-        .then((res) => {
-          const token = res?.data?.access || res?.data?.token || res?.data?.access_token;
-          if (token) {
-            setAuthToken(token);
-          }
-          refreshUser();
-        })
-    )
+  const login = (credentials: LoginCredentials): Promise<void> => {
+    return axios
+      .post('api/accounts/login/', credentials)
+      .then((res: AxiosResponse) => {
+        const token = res?.data?.access || res?.data?.token || res?.data?.access_token;
+        if (token) {
+          setAuthToken(token);
+        }
+        refreshUser();
+      })
+      .then(() => undefined);
   }
 
   // Logout function
-  const logout = () => {
-    return (
-      axios.get('/api/accounts/logout/')
-        .finally(() => {
-          setAuthToken(null);
-          setUser(null);
-        })
-    )
+  const logout = (): Promise<void> => {
+    return axios
+      .get('/api/accounts/logout/')
+      .finally(() => {
+        setAuthToken(null);
+        setUser(null);
+      })
+      .then(() => undefined);
   }
 
   useEffect(() => {
