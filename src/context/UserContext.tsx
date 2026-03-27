@@ -59,10 +59,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Login function 
   const login = (credentials: LoginCredentials): Promise<void> => {
+    const payload = {
+      email: credentials.email,
+      username: credentials.email,
+      password: credentials.password,
+    };
+
     return axios
-      .post('api/accounts/login/', credentials)
+      .post('api/accounts/login/', payload)
       .then((res: AxiosResponse) => {
-        const token = res?.data?.access || res?.data?.token || res?.data?.access_token;
+        const token =
+          res?.data?.access_token ||
+          res?.data?.access ||
+          res?.data?.token ||
+          res?.data?.accessToken;
         if (token) {
           setAuthToken(token);
         }
