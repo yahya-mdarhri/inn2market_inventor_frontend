@@ -18,6 +18,8 @@ const mainItems = [
   { title: 'Tickets', url: '/tickets', icon: Ticket },
   { title: 'Patents', url: '/patents', icon: FileText },
   { title: 'CoInventors', url: '/coinventors', icon: Users },
+  { title: 'Charte de Propriété Intellectuelle', url: '/documents/charte-propriete-intellectuelle', icon: FileText },
+  { title: 'RÈGLEMENT INTÉRIEUR DE PROPRIÉTÉ INTELLECTUELLE', url: '/documents/reglement-interieur-propriete-intellectuelle', icon: FileText },
 ];
 
 const footerItems = [

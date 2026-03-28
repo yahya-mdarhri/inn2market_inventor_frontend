@@ -14,6 +14,8 @@ import PatentDetails from '@pages/PatentDetails/PatentDetails';
 import ForgotPassword from '@pages/ForgotPassword/ForgotPassword';
 import ResetPassword from '@pages/ResetPassword/ResetPassword';
 import CreateAccount from '@pages/CreateAccount';
+import CharteProprieteIntellectuelle from '@pages/Documents/CharteProprieteIntellectuelle';
+import ReglementInterieurProprieteIntellectuelle from '@pages/Documents/ReglementInterieurProprieteIntellectuelle';
 
 
 export const AppRouter = () => (
@@ -36,6 +38,8 @@ export const AppRouter = () => (
         <Route path=":id" element={<TicketDetails />} />
       </Route>
       <Route path="coinventors" element={<CoInventors />} />
+      <Route path="documents/charte-propriete-intellectuelle" element={<CharteProprieteIntellectuelle />} />
+      <Route path="documents/reglement-interieur-propriete-intellectuelle" element={<ReglementInterieurProprieteIntellectuelle />} />
       <Route path="patents" element={<Outlet />} >
         <Route index element={<Patents />} />
         <Route path=":id" element={<PatentDetails />} />
